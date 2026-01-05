@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Schedule Timeline</title>
+
+  <!-- vis-timeline (CDN) -->
+  <link rel="stylesheet" href="https://unpkg.com/vis-timeline@7.7.3/styles/vis-timeline-graph2d.min.css">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
+    header { padding: 12px 16px; border-bottom: 1px solid #ddd; display: flex; gap: 12px; align-items: center; }
+    #timeline { height: calc(100vh - 54px); }
+    .meta { color: #444; font-size: 13px; }
+    .btn { padding: 6px 10px; border: 1px solid #bbb; background: #fff; border-radius: 6px; cursor: pointer; }
+    .btn:active { transform: translateY(1px); }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Schedule Timeline</strong>
+    <span class="meta" id="meta"></span>
+    <button class="btn" id="fitBtn">Fit</button>
+  </header>
+
+  <div id="timeline"></div>
+
+  <script src="https://unpkg.com/vis-data@7.1.6/peer/umd/vis-data.min.js"></script>
+  <script src="https://unpkg.com/vis-timeline@7.7.3/standalone/umd/vis-timeline-graph2d.min.js"></script>
+  <script>
+    async function loadJson() {
+      // Expect schedule_timeline.json to be in the same folder as this HTML.
+      const resp = await fetch('./schedule_timeline.json');
+      if (!resp.ok) throw new Error('Failed to load schedule_timeline.json');
+      return await resp.json();
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function buildTooltip(item) {
+      const d = item.data || {};
+      return `
+        <div style="font-size:12px; line-height:1.25;">
+          <div><strong>WO:</strong> ${escapeHtml(d.wo)}</div>
+          <div><strong>Role:</strong> ${escapeHtml(d.role)}</div>
+          <div><strong>Qty Run:</strong> ${escapeHtml(d.qty_run)}</div>
+          <div><strong>Family:</strong> ${escapeHtml(d.family)}</div>
+          <div><strong>Color:</strong> ${escapeHtml(d.primary_color)}</div>
+          <div><strong>Description:</strong> ${escapeHtml(d.description)}</div>
+          <div><strong>Req Date:</strong> ${escapeHtml(d.req_date || '')}</div>
+          <div><strong>Block:</strong> ${escapeHtml(d.block)}</div>
+          <div><strong>Seq:</strong> ${escapeHtml(d.seq)}</div>
+        </div>
+      `;
+    }
+
+    function makeDatasets(payload) {
+      const groups = new vis.DataSet(payload.groups.map(g => ({
+        id: g.id,
+        content: g.label
+      })));
+
+      const items = new vis.DataSet(payload.items.map(it => ({
+        id: it.id,
+        group: it.group,
+        start: it.start,
+        end: it.end,
+        content: escapeHtml(it.label),
+        title: buildTooltip(it),
+        data: it.data
+      })));
+
+      return { groups, items };
+    }
+
+    async function main() {
+      const payload = await loadJson();
+
+      const { groups, items } = makeDatasets(payload);
+
+      document.getElementById('meta').textContent =
+        `Start: ${payload.meta.start_time} | Segments: ${payload.meta.segment_count}`;
+
+      const container = document.getElementById('timeline');
+
+const start = new Date(payload.meta.start_time);
+const end = new Date(start.getTime() + 12 * 60 * 60 * 1000);
+
+      const options = {
+  stack: false,
+  showCurrentTime: false,
+  zoomKey: 'ctrlKey',
+  tooltip: { followMouse: true },
+  horizontalScroll: true,
+  maxHeight: '100%',
+  editable: true,
+
+  // lock the default view
+  start: start,
+  end: end,
+
+  // prevent zooming out to multi-day views
+  zoomMax: 12 * 60 * 60 * 1000,  // 12 hours max visible range
+  zoomMin: 15 * 60 * 1000,       // 15 min min visible range (tweak)
+  timeAxis: { scale: 'hour', step: 1 },
+};
+
+const timeline = new vis.Timeline(container, items, groups, options);
+
+
+
+// IMPORTANT: set the window after first draw so it "wins" over initial auto-range.
+timeline.once('draw', () => {
+  timeline.setWindow(start, end, { animation: false });
+});
+
+
+
+      // Helpful click handler for debugging / future edit UX:
+      timeline.on('select', function (props) {
+        if (!props.items?.length) return;
+        const item = items.get(props.items[0]);
+        console.log('Selected item:', item);
+      });
+    }
+
+    main().catch(err => {
+      console.error(err);
+      document.getElementById('meta').textContent = String(err);
+    });
+  </script>
+</body>
+</html>
