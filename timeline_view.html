@@ -10,10 +10,118 @@
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
     header { padding: 12px 16px; border-bottom: 1px solid #ddd; display: flex; gap: 12px; align-items: center; }
-    #timeline { height: calc(100vh - 54px); }
     .meta { color: #444; font-size: 13px; }
     .btn { padding: 6px 10px; border: 1px solid #bbb; background: #fff; border-radius: 6px; cursor: pointer; }
     .btn:active { transform: translateY(1px); }
+
+    /* Layout: lists on left, timeline on right */
+    .wrap {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      height: calc(100vh - 54px);
+      min-height: 0;
+    }
+
+    .lists {
+      border-right: 1px solid #ddd;
+      padding: 12px;
+      overflow: auto;
+      min-height: 0;
+      background: #fafafa;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .list {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+    }
+
+    .list h3 {
+      margin: 0;
+      padding: 10px 10px;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+      background: #f6f6f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .count {
+      font-weight: 500;
+      color: #555;
+      font-size: 12px;
+    }
+
+    .list-body {
+      padding: 8px;
+      overflow: auto;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .card {
+      border: 1px solid #e4e4e4;
+      border-radius: 10px;
+      padding: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .card:active { cursor: grabbing; }
+
+    .card.dragging {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+
+    .card .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .card .wo {
+      font-weight: 650;
+    }
+
+    .card .sub {
+      font-size: 12px;
+      color: #444;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      border: 1px solid #ddd;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #f8f8f8;
+      color: #444;
+    }
+
+    /* Drop indicator */
+    .drop-before { box-shadow: 0 -2px 0 0 #333 inset; }
+    .drop-after  { box-shadow: 0  2px 0 0 #333 inset; }
+
+    #timeline { height: 100%; min-height: 0; }
   </style>
 </head>
 <body>
@@ -23,13 +131,36 @@
     <button class="btn" id="fitBtn">Fit</button>
   </header>
 
-  <div id="timeline"></div>
+  <div class="wrap">
+    <aside class="lists">
+      <div class="list-grid">
+        <section class="list" data-deco="A">
+          <h3>
+            <span>Decorator A</span>
+            <span class="count" id="countA"></span>
+          </h3>
+          <div class="list-body" id="listA"></div>
+        </section>
+
+        <section class="list" data-deco="B">
+          <h3>
+            <span>Decorator B</span>
+            <span class="count" id="countB"></span>
+          </h3>
+          <div class="list-body" id="listB"></div>
+        </section>
+      </div>
+    </aside>
+
+    <main id="timeline"></main>
+  </div>
 
   <script src="https://unpkg.com/vis-data@7.1.6/peer/umd/vis-data.min.js"></script>
   <script src="https://unpkg.com/vis-timeline@7.7.3/standalone/umd/vis-timeline-graph2d.min.js"></script>
+
   <script>
     async function loadJson() {
-      // Expect schedule_timeline.json to be in the same folder as this HTML.
+      // NOTE: change filename to your new exported json if needed
       const resp = await fetch('./schedule_timeline.json');
       if (!resp.ok) throw new Error('Failed to load schedule_timeline.json');
       return await resp.json();
@@ -56,11 +187,8 @@
       `;
     }
 
-    function makeDatasets(payload) {
-      const groups = new vis.DataSet(payload.groups.map(g => ({
-        id: g.id,
-        content: g.label
-      })));
+    function makeTimelineDatasets(payload) {
+      const groups = new vis.DataSet(payload.groups.map(g => ({ id: g.id, content: g.label })));
 
       const items = new vis.DataSet(payload.items.map(it => ({
         id: it.id,
@@ -75,54 +203,238 @@
       return { groups, items };
     }
 
+    // --------------------------
+    // Drag/drop list rendering
+    // --------------------------
+    function fmtInt(n) {
+      const x = Number(n);
+      if (!Number.isFinite(x)) return '';
+      return x.toLocaleString();
+    }
+
+    function makeCardEl(entry, deco) {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.draggable = true;
+
+      // ID used for drag operations; must be stable and unique enough.
+      // If WO can repeat in your schedule rows, include block+seq.
+      const dragId = `${deco}::${entry.wo}::${entry.block}::${entry.seq}`;
+      el.dataset.dragId = dragId;
+      el.dataset.deco = deco;
+      el.dataset.wo = entry.wo ?? '';
+      el.dataset.block = String(entry.block ?? '');
+      el.dataset.seq = String(entry.seq ?? '');
+
+      el.innerHTML = `
+        <div class="top">
+          <span class="wo">${escapeHtml(entry.wo)}</span>
+          <span>${escapeHtml(entry.role)} | ${fmtInt(entry.qty)}</span>
+        </div>
+        <div class="sub">
+          <span class="pill">B${escapeHtml(entry.block)}</span>
+          <span class="pill">S${escapeHtml(entry.seq)}</span>
+          ${entry.item_number ? `<span class="pill">Item ${escapeHtml(entry.item_number)}</span>` : ''}
+          ${entry.family ? `<span class="pill">${escapeHtml(entry.family)}</span>` : ''}
+        </div>
+      `;
+      return el;
+    }
+
+    function renderLists(state) {
+      const listA = document.getElementById('listA');
+      const listB = document.getElementById('listB');
+      listA.innerHTML = '';
+      listB.innerHTML = '';
+
+      for (const e of state.A) listA.appendChild(makeCardEl(e, 'A'));
+      for (const e of state.B) listB.appendChild(makeCardEl(e, 'B'));
+
+      document.getElementById('countA').textContent = `${state.A.length} items`;
+      document.getElementById('countB').textContent = `${state.B.length} items`;
+    }
+
+    function installDnD(state, { onMove }) {
+      let dragged = null;
+
+      function clearIndicators(root) {
+        root.querySelectorAll('.drop-before,.drop-after').forEach(n => {
+          n.classList.remove('drop-before', 'drop-after');
+        });
+      }
+
+      function findCardEl(target) {
+        return target?.closest?.('.card') ?? null;
+      }
+
+      function handleDragStart(e) {
+        const card = findCardEl(e.target);
+        if (!card) return;
+        dragged = card;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', card.dataset.dragId);
+      }
+
+      function handleDragEnd(e) {
+        if (dragged) dragged.classList.remove('dragging');
+        dragged = null;
+        clearIndicators(document);
+      }
+
+      function handleDragOver(e) {
+        // Allow drop
+        e.preventDefault();
+
+        const body = e.currentTarget; // list-body
+        clearIndicators(body);
+
+        const overCard = findCardEl(e.target);
+        if (!overCard || overCard === dragged) return;
+
+        const r = overCard.getBoundingClientRect();
+        const before = (e.clientY - r.top) < (r.height / 2);
+        overCard.classList.add(before ? 'drop-before' : 'drop-after');
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        const body = e.currentTarget; // list-body
+        clearIndicators(body);
+
+        const destDeco = body.id === 'listA' ? 'A' : 'B';
+        const dragId = e.dataTransfer.getData('text/plain');
+        if (!dragId) return;
+
+        const [srcDeco, wo, block, seq] = dragId.split('::');
+        if (!srcDeco) return;
+
+        // Determine insertion index
+        const overCard = findCardEl(e.target);
+        let insertIndex = state[destDeco].length;
+
+        if (overCard) {
+          const overId = overCard.dataset.dragId;
+          const [overDeco, overWo, overBlock, overSeq] = overId.split('::');
+          const overIdx = state[destDeco].findIndex(x =>
+            String(x.wo) === String(overWo) &&
+            String(x.block) === String(overBlock) &&
+            String(x.seq) === String(overSeq)
+          );
+          if (overIdx >= 0) {
+            const r = overCard.getBoundingClientRect();
+            const before = (e.clientY - r.top) < (r.height / 2);
+            insertIndex = before ? overIdx : overIdx + 1;
+          }
+        }
+
+        // Pull from source
+        const srcArr = state[srcDeco];
+        const srcIdx = srcArr.findIndex(x =>
+          String(x.wo) === String(wo) &&
+          String(x.block) === String(block) &&
+          String(x.seq) === String(seq)
+        );
+        if (srcIdx < 0) return;
+
+        const [moved] = srcArr.splice(srcIdx, 1);
+
+        // Insert into dest
+        const destArr = state[destDeco];
+        if (srcDeco === destDeco && insertIndex > srcIdx) insertIndex -= 1;
+        destArr.splice(Math.min(insertIndex, destArr.length), 0, moved);
+
+        onMove?.({ moved, from: srcDeco, to: destDeco });
+
+        renderLists(state);
+        // Re-install handlers on fresh DOM
+        wireListBodies();
+      }
+
+      function wireListBodies() {
+        // Remove then re-add by cloning (simple way to avoid duplicate handlers)
+        for (const id of ['listA', 'listB']) {
+          const old = document.getElementById(id);
+          const fresh = old.cloneNode(true);
+          old.parentNode.replaceChild(fresh, old);
+
+          fresh.addEventListener('dragstart', handleDragStart);
+          fresh.addEventListener('dragend', handleDragEnd);
+          fresh.addEventListener('dragover', handleDragOver);
+          fresh.addEventListener('drop', handleDrop);
+        }
+      }
+
+      wireListBodies();
+      return { wireListBodies };
+    }
+
+    // Optional: update timeline group when a list item moves.
+    // This is "best-effort" because your timeline items are per-segment, not per-WO row.
+    function moveTimelineItemsByWO(itemsDataSet, wo, toDeco) {
+      const all = itemsDataSet.get();
+      const matches = all.filter(it => (it?.data?.wo ?? '') === wo);
+      for (const it of matches) {
+        itemsDataSet.update({ id: it.id, group: toDeco });
+      }
+    }
+
     async function main() {
       const payload = await loadJson();
 
-      const { groups, items } = makeDatasets(payload);
-
+      // Timeline
+      const { groups, items } = makeTimelineDatasets(payload);
       document.getElementById('meta').textContent =
         `Start: ${payload.meta.start_time} | Segments: ${payload.meta.segment_count}`;
 
       const container = document.getElementById('timeline');
-
-const start = new Date(payload.meta.start_time);
-const end = new Date(start.getTime() + 12 * 60 * 60 * 1000);
+      const start = new Date(payload.meta.start_time);
+      const end = new Date(start.getTime() + 12 * 60 * 60 * 1000);
 
       const options = {
-  stack: false,
-  showCurrentTime: false,
-  zoomKey: 'ctrlKey',
-  tooltip: { followMouse: true },
-  horizontalScroll: true,
-  maxHeight: '100%',
-  editable: true,
+        stack: false,
+        showCurrentTime: false,
+        zoomKey: 'ctrlKey',
+        tooltip: { followMouse: true },
+        horizontalScroll: true,
+        maxHeight: '100%',
+        editable: true,
+        start: start,
+        end: end,
+        zoomMax: 12 * 60 * 60 * 1000,
+        zoomMin: 15 * 60 * 1000,
+        timeAxis: { scale: 'hour', step: 1 },
+      };
 
-  // lock the default view
-  start: start,
-  end: end,
+      const timeline = new vis.Timeline(container, items, groups, options);
+      timeline.once('draw', () => timeline.setWindow(start, end, { animation: false }));
 
-  // prevent zooming out to multi-day views
-  zoomMax: 12 * 60 * 60 * 1000,  // 12 hours max visible range
-  zoomMin: 15 * 60 * 1000,       // 15 min min visible range (tweak)
-  timeAxis: { scale: 'hour', step: 1 },
-};
+      document.getElementById('fitBtn').addEventListener('click', () => timeline.fit({ animation: true }));
 
-const timeline = new vis.Timeline(container, items, groups, options);
+      // Two vertical lists from new JSON objects
+      const state = {
+        A: payload.decorator_schedules?.A ?? [],
+        B: payload.decorator_schedules?.B ?? [],
+      };
 
+      renderLists(state);
 
+      const dnd = installDnD(state, {
+        onMove: ({ moved, from, to }) => {
+          // Optional visual sync: move all timeline segments for that WO to the new group.
+          // Comment out if you don't want timeline to change on list move.
+          if (moved?.wo) moveTimelineItemsByWO(items, moved.wo, to);
 
-// IMPORTANT: set the window after first draw so it "wins" over initial auto-range.
-timeline.once('draw', () => {
-  timeline.setWindow(start, end, { animation: false });
-});
+          // Debug:
+          console.log('Moved schedule row', { wo: moved.wo, from, to, block: moved.block, seq: moved.seq });
+        }
+      });
 
-
-
-      // Helpful click handler for debugging / future edit UX:
+      // keep click handler
       timeline.on('select', function (props) {
         if (!props.items?.length) return;
         const item = items.get(props.items[0]);
-        console.log('Selected item:', item);
+        console.log('Selected timeline item:', item);
       });
     }
 

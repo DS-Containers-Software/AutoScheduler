@@ -35,7 +35,44 @@ def export_timeline_json(
     out_json_path: str | Path,
     *,
     start_time: datetime | str,
+    deco_a_df: pd.DataFrame | None = None,
+    deco_b_df: pd.DataFrame | None = None,
 ) -> None:
+    
+    def schedule_df_to_records(df: pd.DataFrame) -> list[dict]:
+        if df is None or df.empty:
+            return []
+
+        out = []
+        for _, r in df.iterrows():
+            out.append({
+                "block": int(r["BLOCK"]),
+                "seq": int(r["SEQ"]),
+                "wo": str(r["WO"]),
+                "qty": int(r["QTY"]),
+                "role": str(r["ROLE_IN_BLOCK"]),
+                "family": str(r.get("FAMILY", "")),
+                "primary_color": str(r.get("PRIMARY_COLOR", "")),
+                "item_number": r.get("ITEM_NUMBER"),
+                "description": str(r.get("DESCRIPTION", "")),
+                "req_date": (
+                    r["REQ_DATE"].isoformat()
+                    if pd.notna(r.get("REQ_DATE")) and r.get("REQ_DATE") is not None
+                    else None
+                ),
+                "planned_start": (
+                    r["PLANNED_START"].isoformat()
+                    if "PLANNED_START" in r and pd.notna(r["PLANNED_START"])
+                    else None
+                ),
+                "planned_finish": (
+                    r["PLANNED_FINISH"].isoformat()
+                    if "PLANNED_FINISH" in r and pd.notna(r["PLANNED_FINISH"])
+                    else None
+                ),
+            })
+        return out
+
     if timeline_df is None or timeline_df.empty:
         payload = {
             "meta": {
@@ -90,14 +127,22 @@ def export_timeline_json(
         })
 
     payload = {
-        "meta": {
-            "generated_at": datetime.now().isoformat(timespec="seconds"),
-            "start_time": (start_time.isoformat() if isinstance(start_time, datetime) else str(start_time)),
-            "segment_count": len(items),
-        },
-        "groups": groups,
-        "items": items,
-    }
+            "meta": {
+                "generated_at": datetime.now().isoformat(timespec="seconds"),
+                "start_time": (
+                    start_time.isoformat()
+                    if isinstance(start_time, datetime)
+                    else str(start_time)
+                ),
+                "segment_count": len(items),
+            },
+            "groups": groups,
+            "items": items,
+            "decorator_schedules": {
+                "A": schedule_df_to_records(deco_a_df),
+                "B": schedule_df_to_records(deco_b_df),
+            },
+        }
 
     Path(out_json_path).write_text(json.dumps(payload, indent=2), encoding="utf-8")
 

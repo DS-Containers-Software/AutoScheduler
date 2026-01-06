@@ -209,3 +209,4 @@ marimo/_lsp/
 __marimo__/
 
 output.timeline.json
+schedule_timeline.json

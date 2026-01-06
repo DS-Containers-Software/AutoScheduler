@@ -864,7 +864,13 @@ def main():
     line_4.decorator("B").jobs,
     start_time=start_time,
 )
-    export_timeline_json(timeline_df, out_path.with_suffix(".timeline.json"), start_time=start_time)
+    export_timeline_json(
+    timeline_df,
+    out_path.with_suffix(".timeline.json"),
+    start_time=start_time,
+    deco_a_df=deco_a_data,
+    deco_b_df=deco_b_data,
+)
     logic_timeline_df = make_logic_timeline_sheet(timeline_df)
     # Build the line view sheet
     line_view_data = build_line_view_sheet(deco_a_data, deco_b_data)
