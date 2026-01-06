@@ -1,0 +1,6 @@
+Fixed color collection. We have a database to store part number colors, and if the database doesnt have it then it will look for pdf. Also changed logic
+so that chromatics weight higher than browns/greys.
+
+Made changes so that Line objects will respect can size constraints - can now use all jobs, and only the allowed size will go to the right line.
+
+Added time prediction logic/ displaying timelines.
