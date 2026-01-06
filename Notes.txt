@@ -1,3 +1,4 @@
+V3:
 Fixed color collection. We have a database to store part number colors, and if the database doesnt have it then it will look for pdf. Also changed logic
 so that chromatics weight higher than browns/greys.
 
