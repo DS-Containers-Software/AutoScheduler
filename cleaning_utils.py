@@ -122,6 +122,8 @@ def load_and_clean(
     seq_col = find_col_optional(raw, ["Seq"])
     req_date = find_col_optional(raw, ["Request Date"])
     white = find_col_optional(raw, ["White/Litho"])
+    can_size_col = find_col_optional(raw, ["Can Size"])
+    line_col     = find_col_optional(raw, ["Line"])
 
     colors = pd.Series(["UNKNOWN"] * len(raw), index=raw.index)
     
@@ -158,6 +160,8 @@ def load_and_clean(
         "REQ_DECORATOR": raw[deco_col].map(normalize_decorator) if deco_col else None,
         "SEQ": pd.to_numeric(raw[seq_col], errors="coerce").fillna(0).astype(int) if seq_col else 0,
         "REQ_DATE": pd.to_datetime(raw[req_date], errors="coerce") if req_date else pd.NaT,
+        "CAN_SIZE": raw[can_size_col].where(pd.notna(raw[can_size_col]), "").astype(str).str.strip().str.replace(r"\.0$", "", regex=True) if can_size_col else "",
+        "LINE": raw[line_col].fillna("").astype(str).str.strip() if line_col else "",
     })
 
     data = data[(data["WO"] != "") & (data["QTY"] > 0)].copy()
@@ -171,6 +175,8 @@ def load_and_clean(
         REQ_DECORATOR=("REQ_DECORATOR", _first_non_null),
         SEQ=("SEQ", _first_positive_int),
         REQ_DATE=("REQ_DATE", "min"),
+        CAN_SIZE=("CAN_SIZE", lambda s: _first_non_empty(s, "")),
+        LINE=("LINE", lambda s: _first_non_empty(s, "")),
     )
 
     qty_agg = data.groupby("WO", as_index=False)["QTY"].sum()
@@ -182,6 +188,8 @@ def load_and_clean(
     agg["PRIMARY_COLOR"] = agg["PRIMARY_COLOR"].fillna("UNKNOWN")
     agg["COLOR_RANK"] = pd.to_numeric(agg["COLOR_RANK"], errors="coerce").fillna(999).astype(int)
     agg["REQ_DECORATOR"] = agg["REQ_DECORATOR"].where(agg["REQ_DECORATOR"].isin(["A", "B"]), None)
+    agg["CAN_SIZE"] = agg["CAN_SIZE"].fillna("")
+    agg["LINE"] = agg["LINE"].fillna("")
 
 
     return agg

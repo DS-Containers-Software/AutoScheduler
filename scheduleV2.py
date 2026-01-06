@@ -7,10 +7,11 @@ import argparse
 import math
 from dataclasses import dataclass, replace
 from pathlib import Path
-from collections import deque
+from collections import deque, defaultdict
 import pandas as pd
 from cleaning_utils import load_and_clean
 from exporters import write_excel, export_timeline_json
+import re
 
 @dataclass(frozen=True, slots=True)
 class Job:
@@ -24,6 +25,8 @@ class Job:
     required_decorator: Optional[str] = None
     erp_seq: int = 0 
     req_date: datetime | None = None
+    can_size: str = ""
+    erp_line: Optional[str] = None
 
 @dataclass(frozen=True, slots=True)
 class ScheduledJob:
@@ -116,6 +119,8 @@ class Scheduler:
                     required_decorator=(None if pd.isna(getattr(r, "REQ_DECORATOR", None)) else str(r.REQ_DECORATOR)),
                     erp_seq=int(getattr(r, "SEQ", 0) or 0),
                     req_date=req_date,
+                    can_size=str(getattr(r, "CAN_SIZE", "") or ""),
+                    erp_line=(None if pd.isna(getattr(r, "LINE", None)) else str(getattr(r, "LINE"))),
                 )
             )
         return cls(jobs, line)
@@ -164,11 +169,27 @@ class Scheduler:
         Collect ERP-sequenced jobs into pinned queues (per decorator), but DO NOT schedule them.
         They will be consumed first as normal anchors/next-anchors in run().
         """
+
         for dec_name in ("A", "B"):
-            sequenced = [
-                j for j in self.pool.values()
+            target = norm_line(self.line.name)
+            bad = [
+            (j.wo, j.erp_line)
+            for j in self.pool.values()
+            if j.required_decorator == dec_name and int(getattr(j, "erp_seq", 0)) > 0
+            and norm_line(j.erp_line) != target
+                ]
+            good = [j.wo for j in self.pool.values()
                 if j.required_decorator == dec_name and int(getattr(j, "erp_seq", 0)) > 0
-            ]
+                and norm_line(j.erp_line) == target
+                ]
+            print("Pinned mismatch sample:", bad[:20])
+            print(f"Pinned good sample for decorator {dec_name}:", good[:20])
+            sequenced = [
+                    j for j in self.pool.values()
+                    if j.required_decorator == dec_name
+                    and int(getattr(j, "erp_seq", 0)) > 0
+                    and norm_line(j.erp_line) == norm_line(self.line.name)
+                ]
             sequenced.sort(key=lambda j: (int(j.erp_seq), j.wo))
 
             cum = 0
@@ -218,7 +239,9 @@ class Scheduler:
         self.pool.remove_wo(wo)
 
     def pick_largest_job(self, decorator_name):
-        eligible = [j for j in self.pool.values() if self.is_eligible(j, decorator_name)]
+        eligible = [
+        j for j in self.pool.values() if self.line.can_run(j) and self.is_eligible(j, decorator_name)
+    ]
         if not eligible:
             return None
 
@@ -252,7 +275,7 @@ class Scheduler:
         if count <= 0:
             return []
 
-        candidates = [j for j in self.pool.values() if j.qty < 60000 and self.is_eligible(j, decorator_name)]
+        candidates = [j for j in self.pool.values() if j.qty < 60000 and self.line.can_run(j) and self.is_eligible(j, decorator_name)]
         if not candidates:
             return []
 
@@ -414,6 +437,7 @@ class Scheduler:
             "DESCRIPTION": sj.job.description,
             "ITEM_NUMBER": sj.job.item_number,
             "REQ_DATE": sj.job.req_date,
+            "CAN_SIZE": sj.job.can_size,
         } for sj in decorator.jobs])
 
     def results_to_dataframes(self):
@@ -424,6 +448,13 @@ class Scheduler:
             [{"FAMILY": fam, "DECORATOR": dec} for fam, dec in sorted(self.family_assignment.items())]
         )
         return blocks_df, decorator_a_df, decorator_b_df, family_assignment_df
+    
+def norm_line(x: object) -> str:
+    if x is None:
+        return ""
+    s = str(x).strip().upper()
+    # keep only letters+digits so "LINE 4" == "LINE4"
+    return re.sub(r"[^A-Z0-9]+", "", s)
 
 def assign_jobs_to_lines(all_jobs, lines):
     buckets = {line.name: [] for line in lines}
@@ -653,6 +684,11 @@ def build_timeline_from_objects(
     # ---------- Annotate schedule rows with planned WO start/finish ----------
     def annotate_schedule(df: pd.DataFrame) -> pd.DataFrame:
         out = df.copy()
+        if out.empty or "WO" not in out.columns:
+            out["PLANNED_START"] = pd.NaT
+            out["PLANNED_FINISH"] = pd.NaT
+            out["PLANNED_HOURS"] = 0.0
+            return out
         out["PLANNED_START"] = out["WO"].map(wo_start)
         out["PLANNED_FINISH"] = out["WO"].map(wo_finish)
         out["PLANNED_HOURS"] = (
@@ -758,8 +794,49 @@ def build_line_view_sheet(a_data, b_data):
 
     return pd.DataFrame(rows, columns=cols)
 
+def assign_jobs_to_lines_balanced(all_jobs, lines):
+    buckets = {line.name: [] for line in lines}
+    unassigned = []
 
+    # simple “load” metric: total qty assigned so far
+    load = defaultdict(int)
 
+    for job in all_jobs:
+        eligible_lines = [ln for ln in lines if ln.can_run(job)]
+        if not eligible_lines:
+            unassigned.append(job)
+            continue
+
+        # pick the line with the smallest current load
+        best = min(eligible_lines, key=lambda ln: load[ln.name])
+
+        buckets[best.name].append(job)
+        load[best.name] += int(job.qty)
+
+    return buckets, unassigned
+
+def jobs_from_agg(agg) -> list[Job]:
+    jobs = []
+    for r in agg.itertuples(index=False):
+        val = getattr(r, "REQ_DATE", None)
+        req_date = None if pd.isna(val) else val.to_pydatetime()
+        jobs.append(
+            Job(
+                wo=str(r.WO),
+                qty=int(r.QTY),
+                color_rank=int(r.COLOR_RANK),
+                family=str(r.FAMILY) if pd.notna(r.FAMILY) else "UNKNOWN",
+                primary_color=str(r.PRIMARY_COLOR) if pd.notna(r.PRIMARY_COLOR) else "UNKNOWN",
+                description=str(r.DESCRIPTION) if pd.notna(r.DESCRIPTION) else "",
+                item_number=str(r.ITEM_NUMBER) if pd.notna(r.ITEM_NUMBER) else None,
+                required_decorator=(None if pd.isna(getattr(r, "REQ_DECORATOR", None)) else str(r.REQ_DECORATOR)),
+                erp_seq=int(getattr(r, "SEQ", 0) or 0),
+                req_date=req_date,
+                can_size=str(getattr(r, "CAN_SIZE", "") or ""),
+                erp_line=(None if pd.isna(getattr(r, "LINE", None)) else str(getattr(r, "LINE"))),
+            )
+        )
+    return jobs
 
 def main():
     ap = argparse.ArgumentParser()
@@ -770,12 +847,17 @@ def main():
     in_path = Path(args.input_xlsx).expanduser().resolve()
     out_path = Path(args.output).expanduser().resolve()
     start_time = "2025-12-30 06:00"
-    # Load the data from the input Excel and make sure all columns are present
+
     data = load_and_clean(in_path)
-    #Create line object
-    line_4 = Line(name="LINE_4", daily_capacity=0, decorator_names=("A", "B"))
-    # Build the schedule
-    blocks_data, deco_a_data, deco_b_data, family_data = build_schedule(data, line_4)
+    all_jobs = jobs_from_agg(data) #new
+
+    line_4 = Line(name="LINE4", daily_capacity=0, decorator_names=("A", "B"),can_run_fn=lambda job: job.can_size == "710")
+    lines = [line_4] #new
+    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines) #new
+    sched4 = Scheduler(buckets["LINE4"], line_4).run() #new
+    blocks_data, deco_a_data, deco_b_data, family_data = sched4.results_to_dataframes()
+
+    #blocks_data, deco_a_data, deco_b_data, family_data = build_schedule(data, line_4)
 
     deco_a_data, deco_b_data, timeline_df = build_timeline_from_objects(
     line_4.decorator("A").jobs,
