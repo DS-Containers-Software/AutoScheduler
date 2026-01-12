@@ -140,6 +140,7 @@ def load_and_clean(
                 return "UNKNOWN"
 
             if part not in cache:
+                print(f"Computing color for part '{part}' (row {idx})...")
                 color = compute_primary_color_for_part(
                     part, base_dir=pdf_base_dir, config=color_cfg
                 )

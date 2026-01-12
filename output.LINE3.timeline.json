@@ -1,0 +1,1207 @@
+{
+  "meta": {
+    "generated_at": "2026-01-12T12:34:39",
+    "start_time": "2025-12-30 06:00",
+    "segment_count": 40
+  },
+  "groups": [
+    {
+      "id": "A",
+      "label": "Decorator A"
+    },
+    {
+      "id": "B",
+      "label": "Decorator B"
+    }
+  ],
+  "items": [
+    {
+      "id": "A-0",
+      "group": "A",
+      "start": "2025-12-30T06:00:00",
+      "end": "2025-12-30T08:04:08.275862",
+      "label": "295322 (60,000)",
+      "data": {
+        "wo": "295322",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sanitzer Mountain",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-1",
+      "group": "B",
+      "start": "2025-12-30T08:04:08.275862",
+      "end": "2025-12-30T08:51:18.620690",
+      "label": "297573 (22,800)",
+      "data": {
+        "wo": "297573",
+        "role": "SMALL",
+        "qty_run": 22800,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Jax108 Dry-Glide 10oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-2",
+      "group": "A",
+      "start": "2025-12-30T08:51:18.620690",
+      "end": "2025-12-30T10:55:26.896552",
+      "label": "295322 (60,000)",
+      "data": {
+        "wo": "295322",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sanitzer Mountain",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "A-3",
+      "group": "A",
+      "start": "2025-12-30T10:55:26.896552",
+      "end": "2025-12-30T12:10:08.275862",
+      "label": "295322 (36,100)",
+      "data": {
+        "wo": "295322",
+        "role": "ANCHOR",
+        "qty_run": 36100,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sanitzer Mountain",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-4",
+      "group": "B",
+      "start": "2025-12-30T12:10:08.275862",
+      "end": "2025-12-30T14:14:16.551724",
+      "label": "298725 (60,000)",
+      "data": {
+        "wo": "298725",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "AL2 Whipt Coconut 6.5oz",
+        "req_date": "2026-01-12T00:00:00"
+      }
+    },
+    {
+      "id": "B-5",
+      "group": "B",
+      "start": "2025-12-30T14:14:16.551724",
+      "end": "2025-12-30T16:04:25.655172",
+      "label": "298725 (53,240)",
+      "data": {
+        "wo": "298725",
+        "role": "ANCHOR",
+        "qty_run": 53240,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "AL2 Whipt Coconut 6.5oz",
+        "req_date": "2026-01-12T00:00:00"
+      }
+    },
+    {
+      "id": "A-6",
+      "group": "A",
+      "start": "2025-12-30T16:04:25.655172",
+      "end": "2025-12-30T18:08:33.931034",
+      "label": "298590 (60,000)",
+      "data": {
+        "wo": "298590",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sani Cotton Bloss",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-7",
+      "group": "B",
+      "start": "2025-12-30T18:08:33.931034",
+      "end": "2025-12-30T19:09:53.379310",
+      "label": "294594 (29,640)",
+      "data": {
+        "wo": "294594",
+        "role": "SMALL",
+        "qty_run": 29640,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "DG Disinfectant - Hawaiian",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-8",
+      "group": "A",
+      "start": "2025-12-30T19:09:53.379310",
+      "end": "2025-12-30T21:14:01.655172",
+      "label": "298590 (60,000)",
+      "data": {
+        "wo": "298590",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sani Cotton Bloss",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "A-9",
+      "group": "A",
+      "start": "2025-12-30T21:14:01.655172",
+      "end": "2025-12-30T21:54:59.586206",
+      "label": "298590 (19,800)",
+      "data": {
+        "wo": "298590",
+        "role": "ANCHOR",
+        "qty_run": 19800,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Sani Cotton Bloss",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-10",
+      "group": "B",
+      "start": "2025-12-30T21:54:59.586206",
+      "end": "2025-12-30T23:59:07.862068",
+      "label": "291607 (60,000)",
+      "data": {
+        "wo": "291607",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 4,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "WHITE Print DOT 2Q Plastic",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-11",
+      "group": "B",
+      "start": "2025-12-30T23:59:07.862068",
+      "end": "2025-12-31T00:19:36.827585",
+      "label": "291607 (9,900)",
+      "data": {
+        "wo": "291607",
+        "role": "ANCHOR",
+        "qty_run": 9900,
+        "block": 4,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "WHITE Print DOT 2Q Plastic",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-12",
+      "group": "A",
+      "start": "2025-12-31T00:19:36.827585",
+      "end": "2025-12-31T02:23:45.103447",
+      "label": "296234 (60,000)",
+      "data": {
+        "wo": "296234",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "DDA Dawn Bakery Essentials",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-13",
+      "group": "A",
+      "start": "2025-12-31T02:23:45.103447",
+      "end": "2025-12-31T03:32:26.482757",
+      "label": "296234 (33,200)",
+      "data": {
+        "wo": "296234",
+        "role": "ANCHOR",
+        "qty_run": 33200,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "DDA Dawn Bakery Essentials",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-14",
+      "group": "B",
+      "start": "2025-12-31T03:32:26.482757",
+      "end": "2025-12-31T05:11:30.206895",
+      "label": "298504 (47,880)",
+      "data": {
+        "wo": "298504",
+        "role": "ANCHOR",
+        "qty_run": 47880,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Galv-Match Plus 1",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-15",
+      "group": "A",
+      "start": "2025-12-31T05:11:30.206895",
+      "end": "2025-12-31T06:45:50.896550",
+      "label": "298594 (45,600)",
+      "data": {
+        "wo": "298594",
+        "role": "ANCHOR",
+        "qty_run": 45600,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Amway Prewash Korea 9006127",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-16",
+      "group": "B",
+      "start": "2025-12-31T06:45:50.896550",
+      "end": "2025-12-31T07:51:53.379309",
+      "label": "293379 (31,920)",
+      "data": {
+        "wo": "293379",
+        "role": "ANCHOR",
+        "qty_run": 31920,
+        "block": 8,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Auto Solution MOC Optimizer",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-17",
+      "group": "A",
+      "start": "2025-12-31T07:51:53.379309",
+      "end": "2025-12-31T09:24:47.172412",
+      "label": "294745 (44,900)",
+      "data": {
+        "wo": "294745",
+        "role": "ANCHOR",
+        "qty_run": 44900,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lysol Air Beachside Waves 10oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-18",
+      "group": "B",
+      "start": "2025-12-31T09:24:47.172412",
+      "end": "2025-12-31T10:26:06.620688",
+      "label": "296215 (29,640)",
+      "data": {
+        "wo": "296215",
+        "role": "ANCHOR",
+        "qty_run": 29640,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lucas Oil CLP Lube",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-19",
+      "group": "A",
+      "start": "2025-12-31T10:26:06.620688",
+      "end": "2025-12-31T11:21:55.862067",
+      "label": "294751 (26,980)",
+      "data": {
+        "wo": "294751",
+        "role": "ANCHOR",
+        "qty_run": 26980,
+        "block": 11,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Amway Prewash Spray RK",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-20",
+      "group": "B",
+      "start": "2025-12-31T11:21:55.862067",
+      "end": "2025-12-31T12:18:32.275860",
+      "label": "294003 (27,360)",
+      "data": {
+        "wo": "294003",
+        "role": "ANCHOR",
+        "qty_run": 27360,
+        "block": 12,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "NOCO NCP2 A202 Batt corr.",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-21",
+      "group": "A",
+      "start": "2025-12-31T12:18:32.275860",
+      "end": "2025-12-31T13:00:59.586205",
+      "label": "297574 (20,520)",
+      "data": {
+        "wo": "297574",
+        "role": "ANCHOR",
+        "qty_run": 20520,
+        "block": 13,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "SOSO Water Proofer No PFAS",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-22",
+      "group": "B",
+      "start": "2025-12-31T13:00:59.586205",
+      "end": "2025-12-31T14:25:54.206895",
+      "label": "293854 (41,040)",
+      "data": {
+        "wo": "293854",
+        "role": "ANCHOR",
+        "qty_run": 41040,
+        "block": 14,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Blaster Battery Terminal Clnr",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-23",
+      "group": "A",
+      "start": "2025-12-31T14:25:54.206895",
+      "end": "2025-12-31T15:01:04.551723",
+      "label": "297199 (17,000)",
+      "data": {
+        "wo": "297199",
+        "role": "ANCHOR",
+        "qty_run": 17000,
+        "block": 15,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "A27  Rouses Swetned X-Tra Crmy",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-24",
+      "group": "B",
+      "start": "2025-12-31T15:01:04.551723",
+      "end": "2025-12-31T16:21:16.137930",
+      "label": "297748 (38,760)",
+      "data": {
+        "wo": "297748",
+        "role": "ANCHOR",
+        "qty_run": 38760,
+        "block": 16,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "LW Chain & Cable Lube",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-25",
+      "group": "A",
+      "start": "2025-12-31T16:21:16.137930",
+      "end": "2025-12-31T16:56:26.482758",
+      "label": "297200 (17,000)",
+      "data": {
+        "wo": "297200",
+        "role": "ANCHOR",
+        "qty_run": 17000,
+        "block": 17,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "A60  Rouses Orignl Whip Tppng",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-26",
+      "group": "B",
+      "start": "2025-12-31T16:56:26.482758",
+      "end": "2025-12-31T17:34:10.758620",
+      "label": "294896 (18,240)",
+      "data": {
+        "wo": "294896",
+        "role": "ANCHOR",
+        "qty_run": 18240,
+        "block": 18,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Berryman Electronic Clnr 11oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-27",
+      "group": "A",
+      "start": "2025-12-31T17:34:10.758620",
+      "end": "2025-12-31T18:07:11.999999",
+      "label": "294737 (15,960)",
+      "data": {
+        "wo": "294737",
+        "role": "ANCHOR",
+        "qty_run": 15960,
+        "block": 19,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Amway Home Prewash A2501183",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-28",
+      "group": "B",
+      "start": "2025-12-31T18:07:11.999999",
+      "end": "2025-12-31T18:44:56.275861",
+      "label": "294923 (18,240)",
+      "data": {
+        "wo": "294923",
+        "role": "ANCHOR",
+        "qty_run": 18240,
+        "block": 20,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "BERRYMAN MASS AIR FLOW SENSOR",
+        "req_date": "2026-01-17T00:00:00"
+      }
+    },
+    {
+      "id": "A-29",
+      "group": "A",
+      "start": "2025-12-31T18:44:56.275861",
+      "end": "2025-12-31T19:17:57.517240",
+      "label": "294739 (15,960)",
+      "data": {
+        "wo": "294739",
+        "role": "ANCHOR",
+        "qty_run": 15960,
+        "block": 21,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Amway Home Prewash A2501193",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-30",
+      "group": "B",
+      "start": "2025-12-31T19:17:57.517240",
+      "end": "2025-12-31T20:28:43.034481",
+      "label": "296201 (34,200)",
+      "data": {
+        "wo": "296201",
+        "role": "ANCHOR",
+        "qty_run": 34200,
+        "block": 22,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Titeseal Tire Repair TSTR14/6",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-31",
+      "group": "A",
+      "start": "2025-12-31T20:28:43.034481",
+      "end": "2025-12-31T21:01:44.275860",
+      "label": "298492 (15,960)",
+      "data": {
+        "wo": "298492",
+        "role": "ANCHOR",
+        "qty_run": 15960,
+        "block": 23,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Amway Home Prewash A2501191",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-32",
+      "group": "B",
+      "start": "2025-12-31T21:01:44.275860",
+      "end": "2025-12-31T21:58:20.689653",
+      "label": "297064 (27,360)",
+      "data": {
+        "wo": "297064",
+        "role": "ANCHOR",
+        "qty_run": 27360,
+        "block": 24,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Galvanizing Spray AZZ-100",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-33",
+      "group": "A",
+      "start": "2025-12-31T21:58:20.689653",
+      "end": "2025-12-31T22:54:57.103446",
+      "label": "293022 (27,360)",
+      "data": {
+        "wo": "293022",
+        "role": "ANCHOR",
+        "qty_run": 27360,
+        "block": 25,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Valvoline A/C Foam Cleaner",
+        "req_date": "2026-01-12T00:00:00"
+      }
+    },
+    {
+      "id": "B-34",
+      "group": "B",
+      "start": "2025-12-31T22:54:57.103446",
+      "end": "2025-12-31T23:42:07.448274",
+      "label": "297452 (22,800)",
+      "data": {
+        "wo": "297452",
+        "role": "ANCHOR",
+        "qty_run": 22800,
+        "block": 26,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "AQ5 Tops OG Light WC 6.5oz",
+        "req_date": "2026-01-17T00:00:00"
+      }
+    },
+    {
+      "id": "A-35",
+      "group": "A",
+      "start": "2025-12-31T23:42:07.448274",
+      "end": "2026-01-01T00:29:17.793102",
+      "label": "297347 (22,800)",
+      "data": {
+        "wo": "297347",
+        "role": "ANCHOR",
+        "qty_run": 22800,
+        "block": 27,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "RW for Fruit 6.5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-36",
+      "group": "B",
+      "start": "2026-01-01T00:29:17.793102",
+      "end": "2026-01-01T01:16:28.137930",
+      "label": "296790 (22,800)",
+      "data": {
+        "wo": "296790",
+        "role": "ANCHOR",
+        "qty_run": 22800,
+        "block": 28,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Kraft Cool Whip Reg 225g",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-37",
+      "group": "A",
+      "start": "2026-01-01T01:16:28.137930",
+      "end": "2026-01-01T02:03:38.482758",
+      "label": "290384 (22,800)",
+      "data": {
+        "wo": "290384",
+        "role": "ANCHOR",
+        "qty_run": 22800,
+        "block": 29,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Lubriplate Gear Shield",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-38",
+      "group": "B",
+      "start": "2026-01-01T02:03:38.482758",
+      "end": "2026-01-01T02:43:44.275861",
+      "label": "294093 (19,380)",
+      "data": {
+        "wo": "294093",
+        "role": "ANCHOR",
+        "qty_run": 19380,
+        "block": 30,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Blaster Cable & Chain Lube",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-39",
+      "group": "A",
+      "start": "2026-01-01T02:43:44.275861",
+      "end": "2026-01-01T03:16:13.241378",
+      "label": "296188 (15,700)",
+      "data": {
+        "wo": "296188",
+        "role": "ANCHOR",
+        "qty_run": 15700,
+        "block": 31,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Pro Honda Carburetor Clnr",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    }
+  ],
+  "decorator_schedules": {
+    "A": [
+      {
+        "block": 1,
+        "seq": 1,
+        "wo": "295322",
+        "qty": 156100,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "TEAL",
+        "item_number": "604-07140",
+        "description": "Lysol Air Sanitzer Mountain",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T06:00:00",
+        "planned_finish": "2025-12-30T12:10:08.275862"
+      },
+      {
+        "block": 3,
+        "seq": 2,
+        "wo": "298590",
+        "qty": 139800,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07658",
+        "description": "Lysol Air Sani Cotton Bloss",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T16:04:25.655172",
+        "planned_finish": "2025-12-30T21:54:59.586206"
+      },
+      {
+        "block": 5,
+        "seq": 3,
+        "wo": "296234",
+        "qty": 93200,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "604-05315",
+        "description": "DDA Dawn Bakery Essentials",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-31T00:19:36.827585",
+        "planned_finish": "2025-12-31T03:32:26.482757"
+      },
+      {
+        "block": 7,
+        "seq": 4,
+        "wo": "298594",
+        "qty": 45600,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-05548",
+        "description": "Amway Prewash Korea 9006127",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T05:11:30.206895",
+        "planned_finish": "2025-12-31T06:45:50.896550"
+      },
+      {
+        "block": 9,
+        "seq": 5,
+        "wo": "294745",
+        "qty": 44900,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07615",
+        "description": "Lysol Air Beachside Waves 10oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-31T07:51:53.379309",
+        "planned_finish": "2025-12-31T09:24:47.172412"
+      },
+      {
+        "block": 11,
+        "seq": 6,
+        "wo": "294751",
+        "qty": 26980,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07252",
+        "description": "Amway Prewash Spray RK",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T10:26:06.620688",
+        "planned_finish": "2025-12-31T11:21:55.862067"
+      },
+      {
+        "block": 13,
+        "seq": 7,
+        "wo": "297574",
+        "qty": 20520,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07877",
+        "description": "SOSO Water Proofer No PFAS",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T12:18:32.275860",
+        "planned_finish": "2025-12-31T13:00:59.586205"
+      },
+      {
+        "block": 15,
+        "seq": 8,
+        "wo": "297199",
+        "qty": 17000,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-05430",
+        "description": "A27  Rouses Swetned X-Tra Crmy",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-31T14:25:54.206895",
+        "planned_finish": "2025-12-31T15:01:04.551723"
+      },
+      {
+        "block": 17,
+        "seq": 9,
+        "wo": "297200",
+        "qty": 17000,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-05423",
+        "description": "A60  Rouses Orignl Whip Tppng",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-31T16:21:16.137930",
+        "planned_finish": "2025-12-31T16:56:26.482758"
+      },
+      {
+        "block": 19,
+        "seq": 10,
+        "wo": "294737",
+        "qty": 15960,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07789",
+        "description": "Amway Home Prewash A2501183",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T17:34:10.758620",
+        "planned_finish": "2025-12-31T18:07:11.999999"
+      },
+      {
+        "block": 21,
+        "seq": 11,
+        "wo": "294739",
+        "qty": 15960,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07799",
+        "description": "Amway Home Prewash A2501193",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T18:44:56.275861",
+        "planned_finish": "2025-12-31T19:17:57.517240"
+      },
+      {
+        "block": 23,
+        "seq": 12,
+        "wo": "298492",
+        "qty": 15960,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "604-07814",
+        "description": "Amway Home Prewash A2501191",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T20:28:43.034481",
+        "planned_finish": "2025-12-31T21:01:44.275860"
+      },
+      {
+        "block": 25,
+        "seq": 13,
+        "wo": "293022",
+        "qty": 27360,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "UNKNOWN",
+        "item_number": "604-07777",
+        "description": "Valvoline A/C Foam Cleaner",
+        "req_date": "2026-01-12T00:00:00",
+        "planned_start": "2025-12-31T21:58:20.689653",
+        "planned_finish": "2025-12-31T22:54:57.103446"
+      },
+      {
+        "block": 27,
+        "seq": 14,
+        "wo": "297347",
+        "qty": 22800,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "RED",
+        "item_number": "604-06692",
+        "description": "RW for Fruit 6.5oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T23:42:07.448274",
+        "planned_finish": "2026-01-01T00:29:17.793102"
+      },
+      {
+        "block": 29,
+        "seq": 15,
+        "wo": "290384",
+        "qty": 22800,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREY",
+        "item_number": "604-07016",
+        "description": "Lubriplate Gear Shield",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2026-01-01T01:16:28.137930",
+        "planned_finish": "2026-01-01T02:03:38.482758"
+      },
+      {
+        "block": 31,
+        "seq": 16,
+        "wo": "296188",
+        "qty": 15700,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "PURPLE",
+        "item_number": "604-07729",
+        "description": "Pro Honda Carburetor Clnr",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2026-01-01T02:43:44.275861",
+        "planned_finish": "2026-01-01T03:16:13.241378"
+      }
+    ],
+    "B": [
+      {
+        "block": 1,
+        "seq": 1,
+        "wo": "297573",
+        "qty": 22800,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "604-07908",
+        "description": "Jax108 Dry-Glide 10oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-30T08:04:08.275862",
+        "planned_finish": "2025-12-30T08:51:18.620690"
+      },
+      {
+        "block": 2,
+        "seq": 2,
+        "wo": "298725",
+        "qty": 113240,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "604-07317",
+        "description": "AL2 Whipt Coconut 6.5oz",
+        "req_date": "2026-01-12T00:00:00",
+        "planned_start": "2025-12-30T12:10:08.275862",
+        "planned_finish": "2025-12-30T16:04:25.655172"
+      },
+      {
+        "block": 3,
+        "seq": 3,
+        "wo": "294594",
+        "qty": 29640,
+        "role": "SMALL",
+        "family": "CHV",
+        "primary_color": "ORANGE",
+        "item_number": "604-06128",
+        "description": "DG Disinfectant - Hawaiian",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-30T18:08:33.931034",
+        "planned_finish": "2025-12-30T19:09:53.379310"
+      },
+      {
+        "block": 4,
+        "seq": 4,
+        "wo": "291607",
+        "qty": 69900,
+        "role": "ANCHOR",
+        "family": "STK",
+        "primary_color": "WHITE",
+        "item_number": "604-00833",
+        "description": "WHITE Print DOT 2Q Plastic",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-30T21:54:59.586206",
+        "planned_finish": "2025-12-31T00:19:36.827585"
+      },
+      {
+        "block": 6,
+        "seq": 5,
+        "wo": "298504",
+        "qty": 47880,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "CHARCOAL",
+        "item_number": "604-07560",
+        "description": "Galv-Match Plus 1",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T03:32:26.482757",
+        "planned_finish": "2025-12-31T05:11:30.206895"
+      },
+      {
+        "block": 8,
+        "seq": 6,
+        "wo": "293379",
+        "qty": 31920,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "CHARCOAL",
+        "item_number": "604-06762",
+        "description": "Auto Solution MOC Optimizer",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T06:45:50.896550",
+        "planned_finish": "2025-12-31T07:51:53.379309"
+      },
+      {
+        "block": 10,
+        "seq": 7,
+        "wo": "296215",
+        "qty": 29640,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "CHARCOAL",
+        "item_number": "604-06801",
+        "description": "Lucas Oil CLP Lube",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T09:24:47.172412",
+        "planned_finish": "2025-12-31T10:26:06.620688"
+      },
+      {
+        "block": 12,
+        "seq": 8,
+        "wo": "294003",
+        "qty": 27360,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "CHARCOAL",
+        "item_number": "604-06708",
+        "description": "NOCO NCP2 A202 Batt corr.",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T11:21:55.862067",
+        "planned_finish": "2025-12-31T12:18:32.275860"
+      },
+      {
+        "block": 14,
+        "seq": 9,
+        "wo": "293854",
+        "qty": 41040,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "TEAL",
+        "item_number": "604-07297",
+        "description": "Blaster Battery Terminal Clnr",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T13:00:59.586205",
+        "planned_finish": "2025-12-31T14:25:54.206895"
+      },
+      {
+        "block": 16,
+        "seq": 10,
+        "wo": "297748",
+        "qty": 38760,
+        "role": "ANCHOR",
+        "family": "BLS",
+        "primary_color": "TEAL",
+        "item_number": "604-07693",
+        "description": "LW Chain & Cable Lube",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T15:01:04.551723",
+        "planned_finish": "2025-12-31T16:21:16.137930"
+      },
+      {
+        "block": 18,
+        "seq": 11,
+        "wo": "294896",
+        "qty": 18240,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "TEAL",
+        "item_number": "604-06492",
+        "description": "Berryman Electronic Clnr 11oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T16:56:26.482758",
+        "planned_finish": "2025-12-31T17:34:10.758620"
+      },
+      {
+        "block": 20,
+        "seq": 12,
+        "wo": "294923",
+        "qty": 18240,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "TEAL",
+        "item_number": "604-03362",
+        "description": "BERRYMAN MASS AIR FLOW SENSOR",
+        "req_date": "2026-01-17T00:00:00",
+        "planned_start": "2025-12-31T18:07:11.999999",
+        "planned_finish": "2025-12-31T18:44:56.275861"
+      },
+      {
+        "block": 22,
+        "seq": 13,
+        "wo": "296201",
+        "qty": 34200,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "ORANGE",
+        "item_number": "604-07404",
+        "description": "Titeseal Tire Repair TSTR14/6",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T19:17:57.517240",
+        "planned_finish": "2025-12-31T20:28:43.034481"
+      },
+      {
+        "block": 24,
+        "seq": 14,
+        "wo": "297064",
+        "qty": 27360,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SILVER",
+        "item_number": "604-05702",
+        "description": "Galvanizing Spray AZZ-100",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T21:01:44.275860",
+        "planned_finish": "2025-12-31T21:58:20.689653"
+      },
+      {
+        "block": 26,
+        "seq": 15,
+        "wo": "297452",
+        "qty": 22800,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SILVER",
+        "item_number": "604-07758",
+        "description": "AQ5 Tops OG Light WC 6.5oz",
+        "req_date": "2026-01-17T00:00:00",
+        "planned_start": "2025-12-31T22:54:57.103446",
+        "planned_finish": "2025-12-31T23:42:07.448274"
+      },
+      {
+        "block": 28,
+        "seq": 16,
+        "wo": "296790",
+        "qty": 22800,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "604-07552",
+        "description": "Kraft Cool Whip Reg 225g",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2026-01-01T00:29:17.793102",
+        "planned_finish": "2026-01-01T01:16:28.137930"
+      },
+      {
+        "block": 30,
+        "seq": 17,
+        "wo": "294093",
+        "qty": 19380,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "PURPLE",
+        "item_number": "604-07167",
+        "description": "Blaster Cable & Chain Lube",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2026-01-01T02:03:38.482758",
+        "planned_finish": "2026-01-01T02:43:44.275861"
+      }
+    ]
+  }
+}

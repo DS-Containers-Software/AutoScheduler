@@ -12,7 +12,7 @@ from exporters import export_timeline_json
 import re
 from dataclasses import dataclass, field, replace
 from typing import Dict, Iterable, List, Optional, Tuple, Callable, Set, Any
-import pyodbc
+from db_sqlserver import (input_df_from_cleaned, write_input_to_sqlserver, dataframes_from_plant, write_schedule_to_sqlserver)
 
 
 ResourceKey = Tuple[str, str]  # (line, decorator)
@@ -20,7 +20,6 @@ class ScheduleError(Exception):pass
 class DuplicateWOError(ScheduleError):pass
 class LockedJobError(ScheduleError):pass
 class ValidationError(ScheduleError):pass
-
 
 @dataclass(frozen=True, slots=True)
 class JobLock:
@@ -35,7 +34,6 @@ class JobLock:
     fixed_seq: Optional[int] = None
     frozen: bool = True
     reason: str = ""
-
 
 @dataclass
 class PlantSchedule:
@@ -660,6 +658,12 @@ class Scheduler:
             [{"FAMILY": fam, "DECORATOR": dec} for fam, dec in sorted(self.family_assignment.items())]
         )
         return blocks_df, decorator_a_df, decorator_b_df, family_assignment_df
+
+def item_prefix3(item_number: Optional[str]) -> str:
+    if item_number is None:
+        return ""
+    digits = re.sub(r"\D+", "", str(item_number))
+    return digits[:3]
     
 def norm_line(x: object) -> str:
     if x is None:
@@ -783,8 +787,6 @@ def build_timeline_from_objects(
         blk = [sj for sj in jobs if sj.block == block_no and sj.role_in_block == role]
         blk.sort(key=lambda sj: int(sj.seq))
         return [JobState(job=sj.job) for sj in blk]
-
-    
 
     # For annotating the schedule “rows” (ScheduledJob -> df row)
     def scheduled_jobs_df(deco_name: str, jobs: list[ScheduledJob]) -> pd.DataFrame:
@@ -915,7 +917,6 @@ def build_timeline_from_objects(
 
     return annotate_schedule(a_df), annotate_schedule(b_df), timeline_df
 
-
 def build_schedule(data, line, plant):
     sched = Scheduler.from_agg(data, line, plant).run()
     return sched.results_to_dataframes()
@@ -965,56 +966,6 @@ def jobs_from_agg(agg) -> list[Job]:
         )
     return jobs
 
-def df_to_tuples(df, cols):
-    # Convert NaN/NaT to None so pyodbc sends NULL
-    out = df[cols].copy()
-    out = out.where(pd.notna(out), None)
-    return list(map(tuple, out.to_numpy()))
-
-def write_schedule_to_sqlserver(conn_str: str, work_orders_df: pd.DataFrame, schedule_df: pd.DataFrame):
-    wo_cols = ["wo", "qty", "family", "primary_color", "description", "item_number", "req_date", "can_size"]
-    sch_cols = ["wo", "line", "decorator", "seq", "block", "role_in_block"]
-
-    wo_rows = df_to_tuples(work_orders_df, wo_cols)
-    sch_rows = df_to_tuples(schedule_df, sch_cols)
-
-    insert_work_orders_sql = """
-        INSERT INTO dbo.work_orders
-        (wo, qty, family, primary_color, description, item_number, req_date, can_size)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-    """
-
-    insert_schedule_sql = """
-        INSERT INTO dbo.schedule
-        (wo, line, decorator, seq, block, role_in_block)
-        VALUES (?, ?, ?, ?, ?, ?);
-    """
-
-    with pyodbc.connect(conn_str) as conn:
-        conn.autocommit = False
-        cur = conn.cursor()
-
-        try:
-            # Full refresh (delete children first)
-            cur.execute("DELETE FROM dbo.schedule;")
-            cur.execute("DELETE FROM dbo.work_orders;")
-
-            # Fast bulk insert
-            cur.fast_executemany = True
-
-            if wo_rows:
-                cur.executemany(insert_work_orders_sql, wo_rows)
-
-            if sch_rows:
-                cur.executemany(insert_schedule_sql, sch_rows)
-
-            conn.commit()
-        except Exception:
-            conn.rollback()
-            raise
-        finally:
-            cur.close()
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("input_xlsx", help="Input Excel file path")
@@ -1024,92 +975,65 @@ def main():
     start_time = "2025-12-30 06:00"
 
     data = load_and_clean(in_path)
-    all_jobs = jobs_from_agg(data) 
+    input_df = input_df_from_cleaned(data)
+
+    conn_str = (
+        "DRIVER={ODBC Driver 17 for SQL Server};"
+        "SERVER=dscsqc;"
+        "DATABASE=SchedulePlanning;"
+        "Trusted_Connection=yes;"
+    )
+
+    write_input_to_sqlserver(conn_str, input_df)
+    all_jobs = jobs_from_agg(data)
 
     plant = PlantSchedule()
 
-    line_4 = Line(name="LINE4", daily_capacity=0, decorator_names=("A", "B"),can_run_fn=lambda job: job.can_size == "710")
-    lines = [line_4] 
-    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines) 
-    sched4 = Scheduler(buckets["LINE4"], line_4, plant).run()
-    blocks_data, deco_a_data, deco_b_data, family_data = sched4.results_to_dataframes()
-    schedule_df = pd.concat([deco_a_data, deco_b_data], ignore_index=True)
+    lines = [
+        Line(
+            name="LINE3",
+            daily_capacity=0,
+            decorator_names=("A","B"),
+            can_run_fn=lambda j: item_prefix3(j.item_number) == "604",
+        ),
+        Line(
+            name="LINE4",
+            daily_capacity=0,
+            decorator_names=("A","B"),
+            can_run_fn=lambda j: item_prefix3(j.item_number) in {"710", "205"},
+        ),
+        Line(
+            name="LINE5",
+            daily_capacity=0,
+            decorator_names=("A","B"),
+            can_run_fn=lambda j: item_prefix3(j.item_number) == "604",
+        ),
+    ]
 
-    # match dbo.schedule columns exactly
-    schedule_df = schedule_df.rename(columns={
-        "LINE": "line",
-        "DECORATOR": "decorator",
-        "SEQ": "seq",
-        "BLOCK": "block",
-        "ROLE_IN_BLOCK": "role_in_block",
-        "WO": "wo",
-    })[["wo", "line", "decorator", "seq", "block", "role_in_block"]]
+    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines)
 
-    # enforce types
-    schedule_df["wo"] = schedule_df["wo"].astype(str)
-    schedule_df["line"] = schedule_df["line"].astype(str)
-    schedule_df["decorator"] = schedule_df["decorator"].astype(str)
-    schedule_df["seq"] = schedule_df["seq"].astype(int)
-    schedule_df["block"] = schedule_df["block"].astype(int)
-    schedule_df["role_in_block"] = schedule_df["role_in_block"].astype(str)
+    for ln in lines:
+        Scheduler(buckets[ln.name], ln, plant).run()
 
-    work_orders_df = pd.concat([deco_a_data, deco_b_data], ignore_index=True)
+    # Build ONE set of tables from the whole plant
+    work_orders_df, schedule_df = dataframes_from_plant(plant)
 
-    work_orders_df = (
-        work_orders_df.rename(columns={
-            "WO": "wo",
-            "QTY": "qty",
-            "FAMILY": "family",
-            "PRIMARY_COLOR": "primary_color",
-            "DESCRIPTION": "description",
-            "ITEM_NUMBER": "item_number",
-            "REQ_DATE": "req_date",
-            "CAN_SIZE": "can_size",
-        })[
-            ["wo", "qty", "family", "primary_color", "description", "item_number", "req_date", "can_size"]
-        ]
-    )
-
-    # Enforce types + normalize nulls
-    work_orders_df["wo"] = work_orders_df["wo"].astype(str)
-    work_orders_df["qty"] = pd.to_numeric(work_orders_df["qty"], errors="coerce").fillna(0).astype(int)
-
-    for col in ["family", "primary_color", "description", "item_number", "can_size"]:
-        work_orders_df[col] = work_orders_df[col].where(pd.notna(work_orders_df[col]), None)
-
-    # datetime null handling (NaT -> None)
-    work_orders_df["req_date"] = pd.to_datetime(work_orders_df["req_date"], errors="coerce")
-    work_orders_df["req_date"] = work_orders_df["req_date"].where(work_orders_df["req_date"].notna(), None)
-
-    # Deduplicate by WO (keep first)
-    work_orders_df = work_orders_df.drop_duplicates(subset=["wo"], keep="first").reset_index(drop=True)
-    conn_str = (
-    "DRIVER={ODBC Driver 17 for SQL Server};"
-    "SERVER=dscsqc;"
-    "DATABASE=SchedulePlanning;"
-    "Trusted_Connection=yes;"
-    )
     write_schedule_to_sqlserver(conn_str, work_orders_df, schedule_df)
 
-    # timeline uses the ScheduledJob objects; fetch them from plant
-    deco_a_objs = plant.by_resource("LINE4", "A")
-    deco_b_objs = plant.by_resource("LINE4", "B")
+    # timelines per line
+    for ln in lines:
+        a = plant.by_resource(ln.name, "A")
+        b = plant.by_resource(ln.name, "B")
 
-    deco_a_data, deco_b_data, timeline_df = build_timeline_from_objects(
-        deco_a_objs,
-        deco_b_objs,
-        start_time=start_time,
-    )
+        a_df, b_df, timeline_df = build_timeline_from_objects(a, b, start_time=start_time)
 
-    export_timeline_json(
-    timeline_df,
-    Path("output.timeline.json"),
-    start_time=start_time,
-    deco_a_df=deco_a_data,
-    deco_b_df=deco_b_data,
-)
-
-
+        export_timeline_json(
+            timeline_df,
+            Path(f"output.{ln.name}.timeline.json"),
+            start_time=start_time,
+            deco_a_df=a_df,
+            deco_b_df=b_df,
+        )    
 
 if __name__ == "__main__":
     main()

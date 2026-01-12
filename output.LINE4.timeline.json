@@ -1,0 +1,941 @@
+{
+  "meta": {
+    "generated_at": "2026-01-12T12:34:39",
+    "start_time": "2025-12-30 06:00",
+    "segment_count": 33
+  },
+  "groups": [
+    {
+      "id": "A",
+      "label": "Decorator A"
+    },
+    {
+      "id": "B",
+      "label": "Decorator B"
+    }
+  ],
+  "items": [
+    {
+      "id": "A-0",
+      "group": "A",
+      "start": "2025-12-30T06:00:00",
+      "end": "2025-12-30T07:09:06.206897",
+      "label": "296445 (33,400)",
+      "data": {
+        "wo": "296445",
+        "role": "ANCHOR",
+        "qty_run": 33400,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Best Yet Butter 6oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-1",
+      "group": "B",
+      "start": "2025-12-30T07:09:06.206897",
+      "end": "2025-12-30T09:13:14.482759",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-2",
+      "group": "A",
+      "start": "2025-12-30T09:13:14.482759",
+      "end": "2025-12-30T10:15:55.862069",
+      "label": "296901 (30,300)",
+      "data": {
+        "wo": "296901",
+        "role": "SMALL",
+        "qty_run": 30300,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Best Choice Butter 6oz",
+        "req_date": "2026-01-13T00:00:00"
+      }
+    },
+    {
+      "id": "B-3",
+      "group": "B",
+      "start": "2025-12-30T10:15:55.862069",
+      "end": "2025-12-30T12:20:04.137931",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-4",
+      "group": "A",
+      "start": "2025-12-30T12:20:04.137931",
+      "end": "2025-12-30T12:50:53.793103",
+      "label": "293816 (14,900)",
+      "data": {
+        "wo": "293816",
+        "role": "SMALL",
+        "qty_run": 14900,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Chestnut Hill EVOO",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-5",
+      "group": "B",
+      "start": "2025-12-30T12:50:53.793103",
+      "end": "2025-12-30T14:55:02.068965",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-6",
+      "group": "A",
+      "start": "2025-12-30T14:55:02.068965",
+      "end": "2025-12-30T15:54:49.655172",
+      "label": "293814 (28,900)",
+      "data": {
+        "wo": "293814",
+        "role": "SMALL",
+        "qty_run": 28900,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Chestnut Hill Butter Cook",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-7",
+      "group": "B",
+      "start": "2025-12-30T15:54:49.655172",
+      "end": "2025-12-30T17:58:57.931034",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-8",
+      "group": "A",
+      "start": "2025-12-30T17:58:57.931034",
+      "end": "2025-12-30T19:56:41.379310",
+      "label": "295816 (56,900)",
+      "data": {
+        "wo": "295816",
+        "role": "SMALL",
+        "qty_run": 56900,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Crisco Butter Flavored Spray",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-9",
+      "group": "B",
+      "start": "2025-12-30T19:56:41.379310",
+      "end": "2025-12-30T22:00:49.655172",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-10",
+      "group": "A",
+      "start": "2025-12-30T22:00:49.655172",
+      "end": "2025-12-30T22:38:53.793103",
+      "label": "293768 (18,400)",
+      "data": {
+        "wo": "293768",
+        "role": "SMALL",
+        "qty_run": 18400,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "LouAna Coconut Oil",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-11",
+      "group": "B",
+      "start": "2025-12-30T22:38:53.793103",
+      "end": "2025-12-31T00:43:02.068965",
+      "label": "297178 (60,000)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-12",
+      "group": "B",
+      "start": "2025-12-31T00:43:02.068965",
+      "end": "2025-12-31T01:10:45.517241",
+      "label": "297178 (13,400)",
+      "data": {
+        "wo": "297178",
+        "role": "ANCHOR",
+        "qty_run": 13400,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-13",
+      "group": "A",
+      "start": "2025-12-31T01:10:45.517241",
+      "end": "2025-12-31T03:14:53.793103",
+      "label": "293991 (60,000)",
+      "data": {
+        "wo": "293991",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-14",
+      "group": "B",
+      "start": "2025-12-31T03:14:53.793103",
+      "end": "2025-12-31T04:08:51.558620",
+      "label": "297572 (26,082)",
+      "data": {
+        "wo": "297572",
+        "role": "SMALL",
+        "qty_run": 26082,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "SOSO Intant Clnr No PFAS 9oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-15",
+      "group": "A",
+      "start": "2025-12-31T04:08:51.558620",
+      "end": "2025-12-31T06:12:59.834482",
+      "label": "293991 (60,000)",
+      "data": {
+        "wo": "293991",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-16",
+      "group": "B",
+      "start": "2025-12-31T06:12:59.834482",
+      "end": "2025-12-31T07:23:56.896551",
+      "label": "296138 (34,293)",
+      "data": {
+        "wo": "296138",
+        "role": "SMALL",
+        "qty_run": 34293,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Signature Select Canola 6oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-17",
+      "group": "A",
+      "start": "2025-12-31T07:23:56.896551",
+      "end": "2025-12-31T09:28:05.172413",
+      "label": "293991 (60,000)",
+      "data": {
+        "wo": "293991",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-18",
+      "group": "B",
+      "start": "2025-12-31T09:28:05.172413",
+      "end": "2025-12-31T10:03:03.724137",
+      "label": "296409 (16,905)",
+      "data": {
+        "wo": "296409",
+        "role": "SMALL",
+        "qty_run": 16905,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "WHITE PRINT DOT SP-15146 M5749",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-19",
+      "group": "A",
+      "start": "2025-12-31T10:03:03.724137",
+      "end": "2025-12-31T12:07:11.999999",
+      "label": "293991 (60,000)",
+      "data": {
+        "wo": "293991",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-20",
+      "group": "A",
+      "start": "2025-12-31T12:07:11.999999",
+      "end": "2025-12-31T14:11:07.862068",
+      "label": "293991 (59,900)",
+      "data": {
+        "wo": "293991",
+        "role": "ANCHOR",
+        "qty_run": 59900,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-21",
+      "group": "B",
+      "start": "2025-12-31T14:11:07.862068",
+      "end": "2025-12-31T16:13:24.413792",
+      "label": "296145 (59,100)",
+      "data": {
+        "wo": "296145",
+        "role": "ANCHOR",
+        "qty_run": 59100,
+        "block": 4,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Wegmans Avocado 5oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "A-22",
+      "group": "A",
+      "start": "2025-12-31T16:13:24.413792",
+      "end": "2025-12-31T18:13:19.448275",
+      "label": "293150 (57,960)",
+      "data": {
+        "wo": "293150",
+        "role": "ANCHOR",
+        "qty_run": 57960,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Signature Select EV Olive Oil",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "B-23",
+      "group": "B",
+      "start": "2025-12-31T18:13:19.448275",
+      "end": "2025-12-31T19:18:16.758620",
+      "label": "297416 (31,395)",
+      "data": {
+        "wo": "297416",
+        "role": "ANCHOR",
+        "qty_run": 31395,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HCF Baking W/Flour 5oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-24",
+      "group": "A",
+      "start": "2025-12-31T19:18:16.758620",
+      "end": "2025-12-31T20:54:12.786206",
+      "label": "295299 (46,368)",
+      "data": {
+        "wo": "295299",
+        "role": "ANCHOR",
+        "qty_run": 46368,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PC Organic EVOO 140g",
+        "req_date": "2026-01-12T00:00:00"
+      }
+    },
+    {
+      "id": "B-25",
+      "group": "B",
+      "start": "2025-12-31T20:54:12.786206",
+      "end": "2025-12-31T21:38:16.924137",
+      "label": "297558 (21,300)",
+      "data": {
+        "wo": "297558",
+        "role": "ANCHOR",
+        "qty_run": 21300,
+        "block": 8,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Apple Brand Garde Protect",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-26",
+      "group": "A",
+      "start": "2025-12-31T21:38:16.924137",
+      "end": "2025-12-31T22:53:10.717240",
+      "label": "296093 (36,200)",
+      "data": {
+        "wo": "296093",
+        "role": "ANCHOR",
+        "qty_run": 36200,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Wegman\u2019s EV Olive 5oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-27",
+      "group": "B",
+      "start": "2025-12-31T22:53:10.717240",
+      "end": "2025-12-31T23:25:02.441378",
+      "label": "295278 (15,400)",
+      "data": {
+        "wo": "295278",
+        "role": "ANCHOR",
+        "qty_run": 15400,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Andis #12551 Cool Care Plus",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-28",
+      "group": "A",
+      "start": "2025-12-31T23:25:02.441378",
+      "end": "2026-01-01T00:27:43.820688",
+      "label": "297315 (30,300)",
+      "data": {
+        "wo": "297315",
+        "role": "ANCHOR",
+        "qty_run": 30300,
+        "block": 11,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "INSECT SHIELD FAMILY PROTECT",
+        "req_date": "2026-01-17T00:00:00"
+      }
+    },
+    {
+      "id": "B-29",
+      "group": "B",
+      "start": "2026-01-01T00:27:43.820688",
+      "end": "2026-01-01T00:55:42.662067",
+      "label": "297414 (13,524)",
+      "data": {
+        "wo": "297414",
+        "role": "ANCHOR",
+        "qty_run": 13524,
+        "block": 12,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HCF Butter 6oz",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-30",
+      "group": "A",
+      "start": "2026-01-01T00:55:42.662067",
+      "end": "2026-01-01T01:55:40.179308",
+      "label": "294959 (28,980)",
+      "data": {
+        "wo": "294959",
+        "role": "ANCHOR",
+        "qty_run": 28980,
+        "block": 13,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Ahold Stop & Shop Canola 6oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-31",
+      "group": "B",
+      "start": "2026-01-01T01:55:40.179308",
+      "end": "2026-01-01T02:39:44.317239",
+      "label": "294875 (21,300)",
+      "data": {
+        "wo": "294875",
+        "role": "ANCHOR",
+        "qty_run": 21300,
+        "block": 14,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Keep Off Dog Cat Repellant",
+        "req_date": "2026-01-18T00:00:00"
+      }
+    },
+    {
+      "id": "A-32",
+      "group": "A",
+      "start": "2026-01-01T02:39:44.317239",
+      "end": "2026-01-01T03:17:48.455170",
+      "label": "294851 (18,400)",
+      "data": {
+        "wo": "294851",
+        "role": "ANCHOR",
+        "qty_run": 18400,
+        "block": 15,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Berryman 100 Yr B-12 Chemtool",
+        "req_date": "2026-01-17T00:00:00"
+      }
+    }
+  ],
+  "decorator_schedules": {
+    "A": [
+      {
+        "block": 1,
+        "seq": 1,
+        "wo": "296445",
+        "qty": 33400,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "205-02588",
+        "description": "Best Yet Butter 6oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T06:00:00",
+        "planned_finish": "2025-12-30T07:09:06.206897"
+      },
+      {
+        "block": 2,
+        "seq": 2,
+        "wo": "296901",
+        "qty": 30300,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "ORANGE",
+        "item_number": "205-02311",
+        "description": "Best Choice Butter 6oz",
+        "req_date": "2026-01-13T00:00:00",
+        "planned_start": "2025-12-30T09:13:14.482759",
+        "planned_finish": "2025-12-30T10:15:55.862069"
+      },
+      {
+        "block": 2,
+        "seq": 3,
+        "wo": "293816",
+        "qty": 14900,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "205-02444",
+        "description": "Chestnut Hill EVOO",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-30T12:20:04.137931",
+        "planned_finish": "2025-12-30T12:50:53.793103"
+      },
+      {
+        "block": 2,
+        "seq": 4,
+        "wo": "293814",
+        "qty": 28900,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "205-02421",
+        "description": "Chestnut Hill Butter Cook",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T14:55:02.068965",
+        "planned_finish": "2025-12-30T15:54:49.655172"
+      },
+      {
+        "block": 2,
+        "seq": 5,
+        "wo": "295816",
+        "qty": 56900,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "205-02490",
+        "description": "Crisco Butter Flavored Spray",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T17:58:57.931034",
+        "planned_finish": "2025-12-30T19:56:41.379310"
+      },
+      {
+        "block": 2,
+        "seq": 6,
+        "wo": "293768",
+        "qty": 18400,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-01722",
+        "description": "LouAna Coconut Oil",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-30T22:00:49.655172",
+        "planned_finish": "2025-12-30T22:38:53.793103"
+      },
+      {
+        "block": 3,
+        "seq": 7,
+        "wo": "293991",
+        "qty": 299900,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "205-02516",
+        "description": "PAM Baking No-Stick 5oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T01:10:45.517241",
+        "planned_finish": "2025-12-31T14:11:07.862068"
+      },
+      {
+        "block": 5,
+        "seq": 8,
+        "wo": "293150",
+        "qty": 57960,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "TEAL",
+        "item_number": "205-02383",
+        "description": "Signature Select EV Olive Oil",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T16:13:24.413792",
+        "planned_finish": "2025-12-31T18:13:19.448275"
+      },
+      {
+        "block": 7,
+        "seq": 9,
+        "wo": "295299",
+        "qty": 46368,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "UNKNOWN",
+        "item_number": "205-02642",
+        "description": "PC Organic EVOO 140g",
+        "req_date": "2026-01-12T00:00:00",
+        "planned_start": "2025-12-31T19:18:16.758620",
+        "planned_finish": "2025-12-31T20:54:12.786206"
+      },
+      {
+        "block": 9,
+        "seq": 10,
+        "wo": "296093",
+        "qty": 36200,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "205-02201",
+        "description": "Wegman\u2019s EV Olive 5oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-31T21:38:16.924137",
+        "planned_finish": "2025-12-31T22:53:10.717240"
+      },
+      {
+        "block": 11,
+        "seq": 11,
+        "wo": "297315",
+        "qty": 30300,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "205-02486",
+        "description": "INSECT SHIELD FAMILY PROTECT",
+        "req_date": "2026-01-17T00:00:00",
+        "planned_start": "2025-12-31T23:25:02.441378",
+        "planned_finish": "2026-01-01T00:27:43.820688"
+      },
+      {
+        "block": 13,
+        "seq": 12,
+        "wo": "294959",
+        "qty": 28980,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "205-02062",
+        "description": "Ahold Stop & Shop Canola 6oz",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2026-01-01T00:55:42.662067",
+        "planned_finish": "2026-01-01T01:55:40.179308"
+      },
+      {
+        "block": 15,
+        "seq": 13,
+        "wo": "294851",
+        "qty": 18400,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "BROWN",
+        "item_number": "205-02070",
+        "description": "Berryman 100 Yr B-12 Chemtool",
+        "req_date": "2026-01-17T00:00:00",
+        "planned_start": "2026-01-01T02:39:44.317239",
+        "planned_finish": "2026-01-01T03:17:48.455170"
+      }
+    ],
+    "B": [
+      {
+        "block": 2,
+        "seq": 1,
+        "wo": "297178",
+        "qty": 373400,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "RED",
+        "item_number": "205-02593",
+        "description": "OFF! Outdoor Repellent 8.5oz",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-30T07:09:06.206897",
+        "planned_finish": "2025-12-31T01:10:45.517241"
+      },
+      {
+        "block": 3,
+        "seq": 2,
+        "wo": "297572",
+        "qty": 26082,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "RED",
+        "item_number": "205-02636",
+        "description": "SOSO Intant Clnr No PFAS 9oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T03:14:53.793103",
+        "planned_finish": "2025-12-31T04:08:51.558620"
+      },
+      {
+        "block": 3,
+        "seq": 3,
+        "wo": "296138",
+        "qty": 34293,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "RED",
+        "item_number": "205-02381",
+        "description": "Signature Select Canola 6oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T06:12:59.834482",
+        "planned_finish": "2025-12-31T07:23:56.896551"
+      },
+      {
+        "block": 3,
+        "seq": 4,
+        "wo": "296409",
+        "qty": 16905,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "WHITE",
+        "item_number": "205-00250",
+        "description": "WHITE PRINT DOT SP-15146 M5749",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T09:28:05.172413",
+        "planned_finish": "2025-12-31T10:03:03.724137"
+      },
+      {
+        "block": 4,
+        "seq": 5,
+        "wo": "296145",
+        "qty": 59100,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-02348",
+        "description": "Wegmans Avocado 5oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-31T14:11:07.862068",
+        "planned_finish": "2025-12-31T16:13:24.413792"
+      },
+      {
+        "block": 6,
+        "seq": 6,
+        "wo": "297416",
+        "qty": 31395,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-02090",
+        "description": "HCF Baking W/Flour 5oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T18:13:19.448275",
+        "planned_finish": "2025-12-31T19:18:16.758620"
+      },
+      {
+        "block": 8,
+        "seq": 7,
+        "wo": "297558",
+        "qty": 21300,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-02608",
+        "description": "Apple Brand Garde Protect",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T20:54:12.786206",
+        "planned_finish": "2025-12-31T21:38:16.924137"
+      },
+      {
+        "block": 10,
+        "seq": 8,
+        "wo": "295278",
+        "qty": 15400,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-02521",
+        "description": "Andis #12551 Cool Care Plus",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2025-12-31T22:53:10.717240",
+        "planned_finish": "2025-12-31T23:25:02.441378"
+      },
+      {
+        "block": 12,
+        "seq": 9,
+        "wo": "297414",
+        "qty": 13524,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "205-02160",
+        "description": "HCF Butter 6oz",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2026-01-01T00:27:43.820688",
+        "planned_finish": "2026-01-01T00:55:42.662067"
+      },
+      {
+        "block": 14,
+        "seq": 10,
+        "wo": "294875",
+        "qty": 21300,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "205-02566",
+        "description": "Keep Off Dog Cat Repellant",
+        "req_date": "2026-01-18T00:00:00",
+        "planned_start": "2026-01-01T01:55:40.179308",
+        "planned_finish": "2026-01-01T02:39:44.317239"
+      }
+    ]
+  }
+}
