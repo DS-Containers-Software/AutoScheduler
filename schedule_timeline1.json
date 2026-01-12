@@ -1,0 +1,1677 @@
+{
+  "meta": {
+    "generated_at": "2026-01-06T10:01:33",
+    "start_time": "2025-12-30 06:00",
+    "segment_count": 70
+  },
+  "groups": [
+    {
+      "id": "A",
+      "label": "Decorator A"
+    },
+    {
+      "id": "B",
+      "label": "Decorator B"
+    }
+  ],
+  "items": [
+    {
+      "id": "A-0",
+      "group": "A",
+      "start": "2025-12-30T06:00:00",
+      "end": "2025-12-30T08:04:08.275862",
+      "label": "291982 (60,000)",
+      "data": {
+        "wo": "291982",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-1",
+      "group": "B",
+      "start": "2025-12-30T08:04:08.275862",
+      "end": "2025-12-30T10:02:53.793103",
+      "label": "297173 (57,400)",
+      "data": {
+        "wo": "297173",
+        "role": "SMALL",
+        "qty_run": 57400,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Off Area Repellent  10.5oz",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "A-2",
+      "group": "A",
+      "start": "2025-12-30T10:02:53.793103",
+      "end": "2025-12-30T12:07:02.068965",
+      "label": "291982 (60,000)",
+      "data": {
+        "wo": "291982",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-3",
+      "group": "B",
+      "start": "2025-12-30T12:07:02.068965",
+      "end": "2025-12-30T13:36:12.413793",
+      "label": "296017 (43,100)",
+      "data": {
+        "wo": "296017",
+        "role": "SMALL",
+        "qty_run": 43100,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "GV Mantequilla",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-4",
+      "group": "A",
+      "start": "2025-12-30T13:36:12.413793",
+      "end": "2025-12-30T15:40:20.689655",
+      "label": "291982 (60,000)",
+      "data": {
+        "wo": "291982",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-5",
+      "group": "B",
+      "start": "2025-12-30T15:40:20.689655",
+      "end": "2025-12-30T16:17:35.172414",
+      "label": "295000 (18,000)",
+      "data": {
+        "wo": "295000",
+        "role": "SMALL",
+        "qty_run": 18000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Mosquito Shield Northern Frmla",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-6",
+      "group": "A",
+      "start": "2025-12-30T16:17:35.172414",
+      "end": "2025-12-30T18:21:43.448276",
+      "label": "291982 (60,000)",
+      "data": {
+        "wo": "291982",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-7",
+      "group": "A",
+      "start": "2025-12-30T18:21:43.448276",
+      "end": "2025-12-30T18:36:00",
+      "label": "291982 (6,900)",
+      "data": {
+        "wo": "291982",
+        "role": "ANCHOR",
+        "qty_run": 6900,
+        "block": 1,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-8",
+      "group": "B",
+      "start": "2025-12-30T18:36:00",
+      "end": "2025-12-30T20:40:08.275862",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-9",
+      "group": "A",
+      "start": "2025-12-30T20:40:08.275862",
+      "end": "2025-12-30T21:58:20.689655",
+      "label": "295806 (37,800)",
+      "data": {
+        "wo": "295806",
+        "role": "SMALL",
+        "qty_run": 37800,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Great Value Sabor Mantequilla",
+        "req_date": "2026-01-13T00:00:00"
+      }
+    },
+    {
+      "id": "B-10",
+      "group": "B",
+      "start": "2025-12-30T21:58:20.689655",
+      "end": "2025-12-31T00:02:28.965517",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-11",
+      "group": "A",
+      "start": "2025-12-31T00:02:28.965517",
+      "end": "2025-12-31T00:17:28.344827",
+      "label": "295291 (7,245)",
+      "data": {
+        "wo": "295291",
+        "role": "SMALL",
+        "qty_run": 7245,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-05T00:00:00"
+      }
+    },
+    {
+      "id": "B-12",
+      "group": "B",
+      "start": "2025-12-31T00:17:28.344827",
+      "end": "2025-12-31T02:21:36.620689",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-13",
+      "group": "A",
+      "start": "2025-12-31T02:21:36.620689",
+      "end": "2025-12-31T03:03:36.620689",
+      "label": "295595 (20,300)",
+      "data": {
+        "wo": "295595",
+        "role": "SMALL",
+        "qty_run": 20300,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Mosquito Shield Family & Kids",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-14",
+      "group": "B",
+      "start": "2025-12-31T03:03:36.620689",
+      "end": "2025-12-31T05:07:44.896551",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-15",
+      "group": "A",
+      "start": "2025-12-31T05:07:44.896551",
+      "end": "2025-12-31T05:44:59.379310",
+      "label": "296432 (18,000)",
+      "data": {
+        "wo": "296432",
+        "role": "SMALL",
+        "qty_run": 18000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "White 2PI Print Plastic Pallet",
+        "req_date": "2026-01-10T00:00:00"
+      }
+    },
+    {
+      "id": "B-16",
+      "group": "B",
+      "start": "2025-12-31T05:44:59.379310",
+      "end": "2025-12-31T07:49:07.655172",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-17",
+      "group": "A",
+      "start": "2025-12-31T07:49:07.655172",
+      "end": "2025-12-31T08:46:38.689655",
+      "label": "296444 (27,800)",
+      "data": {
+        "wo": "296444",
+        "role": "SMALL",
+        "qty_run": 27800,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Slime 2 in 1 Tire Sealant",
+        "req_date": "2026-01-19T00:00:00"
+      }
+    },
+    {
+      "id": "B-18",
+      "group": "B",
+      "start": "2025-12-31T08:46:38.689655",
+      "end": "2025-12-31T10:50:46.965517",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "B-19",
+      "group": "B",
+      "start": "2025-12-31T10:50:46.965517",
+      "end": "2025-12-31T12:54:55.241379",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "B-20",
+      "group": "B",
+      "start": "2025-12-31T12:54:55.241379",
+      "end": "2025-12-31T14:59:03.517241",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "B-21",
+      "group": "B",
+      "start": "2025-12-31T14:59:03.517241",
+      "end": "2025-12-31T17:03:11.793103",
+      "label": "297567 (60,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "B-22",
+      "group": "B",
+      "start": "2025-12-31T17:03:11.793103",
+      "end": "2025-12-31T17:23:53.172413",
+      "label": "297567 (10,000)",
+      "data": {
+        "wo": "297567",
+        "role": "ANCHOR",
+        "qty_run": 10000,
+        "block": 2,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-23",
+      "group": "A",
+      "start": "2025-12-31T17:23:53.172413",
+      "end": "2025-12-31T19:28:01.448275",
+      "label": "295385 (60,000)",
+      "data": {
+        "wo": "295385",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "A-24",
+      "group": "A",
+      "start": "2025-12-31T19:28:01.448275",
+      "end": "2025-12-31T20:32:34.551723",
+      "label": "295385 (31,200)",
+      "data": {
+        "wo": "295385",
+        "role": "ANCHOR",
+        "qty_run": 31200,
+        "block": 3,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-06T00:00:00"
+      }
+    },
+    {
+      "id": "B-25",
+      "group": "B",
+      "start": "2025-12-31T20:32:34.551723",
+      "end": "2025-12-31T22:36:42.827585",
+      "label": "297569 (60,000)",
+      "data": {
+        "wo": "297569",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 4,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "B-26",
+      "group": "B",
+      "start": "2025-12-31T22:36:42.827585",
+      "end": "2026-01-01T00:32:15.931033",
+      "label": "297569 (55,850)",
+      "data": {
+        "wo": "297569",
+        "role": "ANCHOR",
+        "qty_run": 55850,
+        "block": 4,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-15T00:00:00"
+      }
+    },
+    {
+      "id": "A-27",
+      "group": "A",
+      "start": "2026-01-01T00:32:15.931033",
+      "end": "2026-01-01T02:36:24.206895",
+      "label": "295081 (60,000)",
+      "data": {
+        "wo": "295081",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-28",
+      "group": "A",
+      "start": "2026-01-01T02:36:24.206895",
+      "end": "2026-01-01T04:40:32.482757",
+      "label": "295081 (60,000)",
+      "data": {
+        "wo": "295081",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-29",
+      "group": "A",
+      "start": "2026-01-01T04:40:32.482757",
+      "end": "2026-01-01T06:44:40.758619",
+      "label": "295081 (60,000)",
+      "data": {
+        "wo": "295081",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "A-30",
+      "group": "A",
+      "start": "2026-01-01T06:44:40.758619",
+      "end": "2026-01-01T07:35:22.137929",
+      "label": "295081 (24,500)",
+      "data": {
+        "wo": "295081",
+        "role": "ANCHOR",
+        "qty_run": 24500,
+        "block": 5,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00"
+      }
+    },
+    {
+      "id": "B-31",
+      "group": "B",
+      "start": "2026-01-01T07:35:22.137929",
+      "end": "2026-01-01T09:39:30.413791",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-32",
+      "group": "B",
+      "start": "2026-01-01T09:39:30.413791",
+      "end": "2026-01-01T11:43:38.689653",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-33",
+      "group": "B",
+      "start": "2026-01-01T11:43:38.689653",
+      "end": "2026-01-01T13:47:46.965515",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-34",
+      "group": "B",
+      "start": "2026-01-01T13:47:46.965515",
+      "end": "2026-01-01T15:51:55.241377",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-35",
+      "group": "B",
+      "start": "2026-01-01T15:51:55.241377",
+      "end": "2026-01-01T17:56:03.517239",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-36",
+      "group": "B",
+      "start": "2026-01-01T17:56:03.517239",
+      "end": "2026-01-01T20:00:11.793101",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-37",
+      "group": "B",
+      "start": "2026-01-01T20:00:11.793101",
+      "end": "2026-01-01T22:04:20.068963",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-38",
+      "group": "B",
+      "start": "2026-01-01T22:04:20.068963",
+      "end": "2026-01-02T00:08:28.344825",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-39",
+      "group": "B",
+      "start": "2026-01-02T00:08:28.344825",
+      "end": "2026-01-02T02:12:36.620687",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-40",
+      "group": "B",
+      "start": "2026-01-02T02:12:36.620687",
+      "end": "2026-01-02T04:16:44.896549",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-41",
+      "group": "B",
+      "start": "2026-01-02T04:16:44.896549",
+      "end": "2026-01-02T06:20:53.172411",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-42",
+      "group": "B",
+      "start": "2026-01-02T06:20:53.172411",
+      "end": "2026-01-02T08:25:01.448273",
+      "label": "294068 (60,000)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "B-43",
+      "group": "B",
+      "start": "2026-01-02T08:25:01.448273",
+      "end": "2026-01-02T08:57:05.586204",
+      "label": "294068 (15,500)",
+      "data": {
+        "wo": "294068",
+        "role": "ANCHOR",
+        "qty_run": 15500,
+        "block": 6,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00"
+      }
+    },
+    {
+      "id": "A-44",
+      "group": "A",
+      "start": "2026-01-02T08:57:05.586204",
+      "end": "2026-01-02T11:01:13.862066",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-45",
+      "group": "A",
+      "start": "2026-01-02T11:01:13.862066",
+      "end": "2026-01-02T13:05:22.137928",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-46",
+      "group": "A",
+      "start": "2026-01-02T13:05:22.137928",
+      "end": "2026-01-02T15:09:30.413790",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-47",
+      "group": "A",
+      "start": "2026-01-02T15:09:30.413790",
+      "end": "2026-01-02T17:13:38.689652",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-48",
+      "group": "A",
+      "start": "2026-01-02T17:13:38.689652",
+      "end": "2026-01-02T19:17:46.965514",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-49",
+      "group": "A",
+      "start": "2026-01-02T19:17:46.965514",
+      "end": "2026-01-02T21:21:55.241376",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-50",
+      "group": "A",
+      "start": "2026-01-02T21:21:55.241376",
+      "end": "2026-01-02T23:26:03.517238",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-51",
+      "group": "A",
+      "start": "2026-01-02T23:26:03.517238",
+      "end": "2026-01-03T01:30:11.793100",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-52",
+      "group": "A",
+      "start": "2026-01-03T01:30:11.793100",
+      "end": "2026-01-03T03:34:20.068962",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-53",
+      "group": "A",
+      "start": "2026-01-03T03:34:20.068962",
+      "end": "2026-01-03T05:38:28.344824",
+      "label": "290934 (60,000)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-54",
+      "group": "A",
+      "start": "2026-01-03T05:38:28.344824",
+      "end": "2026-01-03T05:46:32.482755",
+      "label": "290934 (3,900)",
+      "data": {
+        "wo": "290934",
+        "role": "ANCHOR",
+        "qty_run": 3900,
+        "block": 7,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-55",
+      "group": "B",
+      "start": "2026-01-03T05:46:32.482755",
+      "end": "2026-01-03T07:50:40.758617",
+      "label": "296021 (60,000)",
+      "data": {
+        "wo": "296021",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 8,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "VO5 Vibey Mousse",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-56",
+      "group": "B",
+      "start": "2026-01-03T07:50:40.758617",
+      "end": "2026-01-03T09:15:30.413789",
+      "label": "296021 (41,000)",
+      "data": {
+        "wo": "296021",
+        "role": "ANCHOR",
+        "qty_run": 41000,
+        "block": 8,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "VO5 Vibey Mousse",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "A-57",
+      "group": "A",
+      "start": "2026-01-03T09:15:30.413789",
+      "end": "2026-01-03T11:19:38.689651",
+      "label": "294976 (60,000)",
+      "data": {
+        "wo": "294976",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-58",
+      "group": "A",
+      "start": "2026-01-03T11:19:38.689651",
+      "end": "2026-01-03T13:23:46.965513",
+      "label": "294976 (60,000)",
+      "data": {
+        "wo": "294976",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-59",
+      "group": "A",
+      "start": "2026-01-03T13:23:46.965513",
+      "end": "2026-01-03T15:27:55.241375",
+      "label": "294976 (60,000)",
+      "data": {
+        "wo": "294976",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-60",
+      "group": "A",
+      "start": "2026-01-03T15:27:55.241375",
+      "end": "2026-01-03T17:32:03.517237",
+      "label": "294976 (60,000)",
+      "data": {
+        "wo": "294976",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "A-61",
+      "group": "A",
+      "start": "2026-01-03T17:32:03.517237",
+      "end": "2026-01-03T17:45:17.999996",
+      "label": "294976 (6,400)",
+      "data": {
+        "wo": "294976",
+        "role": "ANCHOR",
+        "qty_run": 6400,
+        "block": 9,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-62",
+      "group": "B",
+      "start": "2026-01-03T17:45:17.999996",
+      "end": "2026-01-03T19:49:26.275858",
+      "label": "297564 (60,000)",
+      "data": {
+        "wo": "297564",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-63",
+      "group": "B",
+      "start": "2026-01-03T19:49:26.275858",
+      "end": "2026-01-03T21:53:34.551720",
+      "label": "297564 (60,000)",
+      "data": {
+        "wo": "297564",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-64",
+      "group": "B",
+      "start": "2026-01-03T21:53:34.551720",
+      "end": "2026-01-03T23:57:42.827582",
+      "label": "297564 (60,000)",
+      "data": {
+        "wo": "297564",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-65",
+      "group": "B",
+      "start": "2026-01-03T23:57:42.827582",
+      "end": "2026-01-04T02:01:51.103444",
+      "label": "297564 (60,000)",
+      "data": {
+        "wo": "297564",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-66",
+      "group": "B",
+      "start": "2026-01-04T02:01:51.103444",
+      "end": "2026-01-04T02:16:07.655168",
+      "label": "297564 (6,900)",
+      "data": {
+        "wo": "297564",
+        "role": "ANCHOR",
+        "qty_run": 6900,
+        "block": 10,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00"
+      }
+    },
+    {
+      "id": "B-67",
+      "group": "B",
+      "start": "2026-01-04T02:16:07.655168",
+      "end": "2026-01-04T04:20:15.931030",
+      "label": "297565 (60,000)",
+      "data": {
+        "wo": "297565",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 11,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-68",
+      "group": "B",
+      "start": "2026-01-04T04:20:15.931030",
+      "end": "2026-01-04T06:24:24.206892",
+      "label": "297565 (60,000)",
+      "data": {
+        "wo": "297565",
+        "role": "ANCHOR",
+        "qty_run": 60000,
+        "block": 11,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    },
+    {
+      "id": "B-69",
+      "group": "B",
+      "start": "2026-01-04T06:24:24.206892",
+      "end": "2026-01-04T06:25:57.310340",
+      "label": "297565 (750)",
+      "data": {
+        "wo": "297565",
+        "role": "ANCHOR",
+        "qty_run": 750,
+        "block": 11,
+        "seq": null,
+        "family": "",
+        "primary_color": "",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-08T00:00:00"
+      }
+    }
+  ],
+  "decorator_schedules": {
+    "A": [
+      {
+        "block": 1,
+        "seq": 1,
+        "wo": "291982",
+        "qty": 246900,
+        "role": "ANCHOR",
+        "family": "GV",
+        "primary_color": "SKY",
+        "item_number": "710-00558",
+        "description": "Great Value Vegetable 8oz",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2025-12-30T06:00:00",
+        "planned_finish": "2025-12-30T18:36:00"
+      },
+      {
+        "block": 2,
+        "seq": 2,
+        "wo": "295806",
+        "qty": 37800,
+        "role": "SMALL",
+        "family": "GV",
+        "primary_color": "BROWN",
+        "item_number": "710-00913",
+        "description": "Great Value Sabor Mantequilla",
+        "req_date": "2026-01-13T00:00:00",
+        "planned_start": "2025-12-30T20:40:08.275862",
+        "planned_finish": "2025-12-30T21:58:20.689655"
+      },
+      {
+        "block": 2,
+        "seq": 3,
+        "wo": "295291",
+        "qty": 7245,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "710-00979",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-05T00:00:00",
+        "planned_start": "2025-12-31T00:02:28.965517",
+        "planned_finish": "2025-12-31T00:17:28.344827"
+      },
+      {
+        "block": 2,
+        "seq": 4,
+        "wo": "295595",
+        "qty": 20300,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "NAVY",
+        "item_number": "710-01006",
+        "description": "Mosquito Shield Family & Kids",
+        "req_date": "2026-01-11T00:00:00",
+        "planned_start": "2025-12-31T02:21:36.620689",
+        "planned_finish": "2025-12-31T03:03:36.620689"
+      },
+      {
+        "block": 2,
+        "seq": 5,
+        "wo": "296432",
+        "qty": 18000,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "BLACK",
+        "item_number": "710-00906",
+        "description": "White 2PI Print Plastic Pallet",
+        "req_date": "2026-01-10T00:00:00",
+        "planned_start": "2025-12-31T05:07:44.896551",
+        "planned_finish": "2025-12-31T05:44:59.379310"
+      },
+      {
+        "block": 2,
+        "seq": 6,
+        "wo": "296444",
+        "qty": 27800,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "BLACK",
+        "item_number": "710-00975",
+        "description": "Slime 2 in 1 Tire Sealant",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-31T07:49:07.655172",
+        "planned_finish": "2025-12-31T08:46:38.689655"
+      },
+      {
+        "block": 2,
+        "seq": 7,
+        "wo": "295385",
+        "qty": 91200,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "710-00979",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-06T00:00:00",
+        "planned_start": "2025-12-31T17:23:53.172413",
+        "planned_finish": "2025-12-31T20:32:34.551723"
+      },
+      {
+        "block": 3,
+        "seq": 8,
+        "wo": "295385",
+        "qty": 91200,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "710-00979",
+        "description": "GV Vegetable Oil",
+        "req_date": "2026-01-06T00:00:00",
+        "planned_start": "2025-12-31T17:23:53.172413",
+        "planned_finish": "2025-12-31T20:32:34.551723"
+      },
+      {
+        "block": 4,
+        "seq": 9,
+        "wo": "295081",
+        "qty": 204500,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "710-00952",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2026-01-01T00:32:15.931033",
+        "planned_finish": "2026-01-01T07:35:22.137929"
+      },
+      {
+        "block": 5,
+        "seq": 10,
+        "wo": "295081",
+        "qty": 204500,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "SKY",
+        "item_number": "710-00952",
+        "description": "HRB Rave 4X Mega Scented HS",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2026-01-01T00:32:15.931033",
+        "planned_finish": "2026-01-01T07:35:22.137929"
+      },
+      {
+        "block": 6,
+        "seq": 11,
+        "wo": "290934",
+        "qty": 603900,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "710-00690",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2026-01-02T08:57:05.586204",
+        "planned_finish": "2026-01-03T05:46:32.482755"
+      },
+      {
+        "block": 7,
+        "seq": 12,
+        "wo": "290934",
+        "qty": 603900,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GOLD",
+        "item_number": "710-00690",
+        "description": "PAM Original 8oz",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2026-01-02T08:57:05.586204",
+        "planned_finish": "2026-01-03T05:46:32.482755"
+      },
+      {
+        "block": 8,
+        "seq": 13,
+        "wo": "294976",
+        "qty": 246400,
+        "role": "NEXT_ANCHOR",
+        "family": "PAM",
+        "primary_color": "GOLD",
+        "item_number": "710-00432",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2026-01-03T09:15:30.413789",
+        "planned_finish": "2026-01-03T17:45:17.999996"
+      },
+      {
+        "block": 9,
+        "seq": 14,
+        "wo": "294976",
+        "qty": 246400,
+        "role": "ANCHOR",
+        "family": "PAM",
+        "primary_color": "GOLD",
+        "item_number": "710-00432",
+        "description": "PAM Original 170g Canadian",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2026-01-03T09:15:30.413789",
+        "planned_finish": "2026-01-03T17:45:17.999996"
+      }
+    ],
+    "B": [
+      {
+        "block": 1,
+        "seq": 1,
+        "wo": "297173",
+        "qty": 57400,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "RED",
+        "item_number": "710-00967",
+        "description": "Off Area Repellent  10.5oz",
+        "req_date": "2026-01-19T00:00:00",
+        "planned_start": "2025-12-30T08:04:08.275862",
+        "planned_finish": "2025-12-30T10:02:53.793103"
+      },
+      {
+        "block": 1,
+        "seq": 2,
+        "wo": "296017",
+        "qty": 43100,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "BROWN",
+        "item_number": "710-00984",
+        "description": "GV Mantequilla",
+        "req_date": "2026-01-06T00:00:00",
+        "planned_start": "2025-12-30T12:07:02.068965",
+        "planned_finish": "2025-12-30T13:36:12.413793"
+      },
+      {
+        "block": 1,
+        "seq": 3,
+        "wo": "295000",
+        "qty": 18000,
+        "role": "SMALL",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-00993",
+        "description": "Mosquito Shield Northern Frmla",
+        "req_date": "2026-01-14T00:00:00",
+        "planned_start": "2025-12-30T15:40:20.689655",
+        "planned_finish": "2025-12-30T16:17:35.172414"
+      },
+      {
+        "block": 1,
+        "seq": 4,
+        "wo": "297567",
+        "qty": 550000,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01016",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00",
+        "planned_start": "2025-12-30T18:36:00",
+        "planned_finish": "2025-12-31T17:23:53.172413"
+      },
+      {
+        "block": 2,
+        "seq": 5,
+        "wo": "297567",
+        "qty": 550000,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01016",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-06T00:00:00",
+        "planned_start": "2025-12-30T18:36:00",
+        "planned_finish": "2025-12-31T17:23:53.172413"
+      },
+      {
+        "block": 3,
+        "seq": 6,
+        "wo": "297569",
+        "qty": 115850,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01016",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-31T20:32:34.551723",
+        "planned_finish": "2026-01-01T00:32:15.931033"
+      },
+      {
+        "block": 4,
+        "seq": 7,
+        "wo": "297569",
+        "qty": 115850,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01016",
+        "description": "Aldi Olive Oil 7oz",
+        "req_date": "2026-01-15T00:00:00",
+        "planned_start": "2025-12-31T20:32:34.551723",
+        "planned_finish": "2026-01-01T00:32:15.931033"
+      },
+      {
+        "block": 5,
+        "seq": 8,
+        "wo": "294068",
+        "qty": 735500,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-00861",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00",
+        "planned_start": "2026-01-01T07:35:22.137929",
+        "planned_finish": "2026-01-02T08:57:05.586204"
+      },
+      {
+        "block": 6,
+        "seq": 9,
+        "wo": "294068",
+        "qty": 735500,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-00861",
+        "description": "Members Mark Olive Oil 7oz",
+        "req_date": "2026-01-11T00:00:00",
+        "planned_start": "2026-01-01T07:35:22.137929",
+        "planned_finish": "2026-01-02T08:57:05.586204"
+      },
+      {
+        "block": 7,
+        "seq": 10,
+        "wo": "296021",
+        "qty": 101000,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01015",
+        "description": "VO5 Vibey Mousse",
+        "req_date": "2026-01-07T00:00:00",
+        "planned_start": "2026-01-03T05:46:32.482755",
+        "planned_finish": "2026-01-03T09:15:30.413789"
+      },
+      {
+        "block": 8,
+        "seq": 11,
+        "wo": "296021",
+        "qty": 101000,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "GREEN",
+        "item_number": "710-01015",
+        "description": "VO5 Vibey Mousse",
+        "req_date": "2026-01-07T00:00:00",
+        "planned_start": "2026-01-03T05:46:32.482755",
+        "planned_finish": "2026-01-03T09:15:30.413789"
+      },
+      {
+        "block": 9,
+        "seq": 12,
+        "wo": "297564",
+        "qty": 246900,
+        "role": "NEXT_ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "ORANGE",
+        "item_number": "710-01019",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00",
+        "planned_start": "2026-01-03T17:45:17.999996",
+        "planned_finish": "2026-01-04T02:16:07.655168"
+      },
+      {
+        "block": 10,
+        "seq": 13,
+        "wo": "297564",
+        "qty": 246900,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "ORANGE",
+        "item_number": "710-01019",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-07T00:00:00",
+        "planned_start": "2026-01-03T17:45:17.999996",
+        "planned_finish": "2026-01-04T02:16:07.655168"
+      },
+      {
+        "block": 11,
+        "seq": 14,
+        "wo": "297565",
+        "qty": 120750,
+        "role": "ANCHOR",
+        "family": "UNKNOWN",
+        "primary_color": "ORANGE",
+        "item_number": "710-01019",
+        "description": "Aldi Canola Oil 8oz",
+        "req_date": "2026-01-08T00:00:00",
+        "planned_start": "2026-01-04T02:16:07.655168",
+        "planned_finish": "2026-01-04T06:25:57.310340"
+      }
+    ]
+  }
+}

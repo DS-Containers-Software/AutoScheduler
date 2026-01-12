@@ -2,16 +2,222 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 import json
-from typing import Dict, List, Optional, Any
 import argparse
 import math
-from dataclasses import dataclass, replace
 from pathlib import Path
 from collections import deque, defaultdict
 import pandas as pd
 from cleaning_utils import load_and_clean
-from exporters import write_excel, export_timeline_json
+from exporters import export_timeline_json
 import re
+from dataclasses import dataclass, field, replace
+from typing import Dict, Iterable, List, Optional, Tuple, Callable, Set, Any
+import pyodbc
+
+
+ResourceKey = Tuple[str, str]  # (line, decorator)
+class ScheduleError(Exception):pass
+class DuplicateWOError(ScheduleError):pass
+class LockedJobError(ScheduleError):pass
+class ValidationError(ScheduleError):pass
+
+
+@dataclass(frozen=True, slots=True)
+class JobLock:
+    """
+    Lock rules for a WO.
+
+    - required_resource: WO must stay on that (line, decorator)
+    - fixed_seq: WO must stay at that seq (within its decorator)
+    - frozen: disallow remove/move unless explicitly overridden/unlocked
+    """
+    required_resource: Optional[ResourceKey] = None
+    fixed_seq: Optional[int] = None
+    frozen: bool = True
+    reason: str = ""
+
+
+@dataclass
+class PlantSchedule:
+    """
+    Authoritative container for ScheduledJob across the whole plant.
+
+    Key invariant (no WO splitting):
+      - each WO appears at most once across the entire schedule
+    """
+    _by_wo: Dict[str, "ScheduledJob"] = field(default_factory=dict)
+    _locks: Dict[str, JobLock] = field(default_factory=dict)
+
+    # -------------------------
+    # Locks
+    # -------------------------
+
+    def lock(self, wo: str, lock: JobLock) -> None:
+        self._locks[str(wo)] = lock
+
+    def unlock(self, wo: str) -> None:
+        self._locks.pop(str(wo), None)
+
+    def lock_for(self, wo: str) -> Optional[JobLock]:
+        return self._locks.get(str(wo))
+
+    def is_frozen(self, wo: str) -> bool:
+        lk = self._locks.get(str(wo))
+        return bool(lk and lk.frozen)
+
+    # -------------------------
+    # Core CRUD
+    # -------------------------
+
+    def add(self, sj: "ScheduledJob") -> None:
+        wo = str(sj.job.wo)
+        if wo in self._by_wo:
+            existing = self._by_wo[wo]
+            raise DuplicateWOError(
+                f"WO {wo} already scheduled on {existing.line}/{existing.decorator} "
+                f"(trying {sj.line}/{sj.decorator})."
+            )
+        self._enforce_lock(sj)
+        self._by_wo[wo] = sj
+
+    def upsert(self, sj: "ScheduledJob", *, force: bool = False) -> None:
+        """
+        Replace or insert. Use this for manual edits.
+        If the WO is frozen, you must pass force=True (or unlock first).
+        """
+        wo = str(sj.job.wo)
+        if self.is_frozen(wo) and not force:
+            raise LockedJobError(f"WO {wo} is frozen; unlock or use force=True.")
+        self._enforce_lock(sj)
+        self._by_wo[wo] = sj
+
+    def remove(self, wo: str, *, force: bool = False) -> None:
+        wo = str(wo)
+        if self.is_frozen(wo) and not force:
+            raise LockedJobError(f"WO {wo} is frozen; unlock or use force=True.")
+        self._by_wo.pop(wo, None)
+
+    def get(self, wo: str) -> Optional["ScheduledJob"]:
+        return self._by_wo.get(str(wo))
+
+    def all(self) -> List["ScheduledJob"]:
+        return list(self._by_wo.values())
+
+    # -------------------------
+    # Views
+    # -------------------------
+
+    def resources(self) -> Set[ResourceKey]:
+        return {(sj.line, sj.decorator) for sj in self._by_wo.values()}
+
+    def by_line(self, line: str) -> List["ScheduledJob"]:
+        out = [sj for sj in self._by_wo.values() if sj.line == line]
+        out.sort(key=lambda sj: (sj.decorator, int(sj.seq)))
+        return out
+
+    def by_resource(self, line: str, decorator: str) -> List["ScheduledJob"]:
+        out = [sj for sj in self._by_wo.values() if sj.line == line and sj.decorator == decorator]
+        out.sort(key=lambda sj: int(sj.seq))
+        return out
+
+    def validate(
+        self,
+        *,
+        can_run: Optional[Callable[["ScheduledJob"], bool]] = None,
+        require_unique_seq: bool = True,
+    ) -> None:
+        # Validate lock compliance for all scheduled jobs
+        for sj in self._by_wo.values():
+            self._enforce_lock(sj)
+
+        # Feasibility hook
+        if can_run is not None:
+            bad = [sj for sj in self._by_wo.values() if not can_run(sj)]
+            if bad:
+                sample = ", ".join(f"{x.job.wo}@{x.line}/{x.decorator}" for x in bad[:10])
+                raise ValidationError(f"Infeasible jobs in schedule (sample): {sample}")
+
+        # Seq uniqueness per resource
+        if require_unique_seq:
+            seen: Dict[ResourceKey, Set[int]] = {}
+            for sj in self._by_wo.values():
+                rk = (sj.line, sj.decorator)
+                seen.setdefault(rk, set())
+                s = int(sj.seq)
+                if s in seen[rk]:
+                    raise ValidationError(f"Duplicate seq {s} on {rk} (WO {sj.job.wo}).")
+                seen[rk].add(s)
+
+    def normalize_sequences(self) -> None:
+        """
+        Renumber seq per (line, decorator) to 1..N in current seq order.
+
+        Respects fixed_seq locks:
+          - jobs with fixed_seq keep that number
+          - other jobs are packed around them
+          - raises if fixed_seq collisions occur
+        """
+        grouped: Dict[ResourceKey, List["ScheduledJob"]] = {}
+        for sj in self._by_wo.values():
+            grouped.setdefault((sj.line, sj.decorator), []).append(sj)
+
+        new_by_wo = dict(self._by_wo)
+
+        for rk, lst in grouped.items():
+            lst.sort(key=lambda sj: int(sj.seq))
+            fixed_map: Dict[int, "ScheduledJob"] = {}
+            movable: List["ScheduledJob"] = []
+
+            for sj in lst:
+                lk = self._locks.get(str(sj.job.wo))
+                if lk and lk.fixed_seq is not None:
+                    fs = int(lk.fixed_seq)
+                    if fs in fixed_map and str(fixed_map[fs].job.wo) != str(sj.job.wo):
+                        raise LockedJobError(f"fixed_seq collision on {rk} at seq={fs}.")
+                    fixed_map[fs] = sj
+                else:
+                    movable.append(sj)
+
+            # Assign sequences 1..N, preserving fixed slots
+            i = 1
+            m_idx = 0
+            total = len(lst)
+            while i <= total:
+                if i in fixed_map:
+                    sj = fixed_map[i]
+                    if int(sj.seq) != i:
+                        new_by_wo[str(sj.job.wo)] = replace(sj, seq=i)
+                else:
+                    sj = movable[m_idx]
+                    m_idx += 1
+                    if int(sj.seq) != i:
+                        new_by_wo[str(sj.job.wo)] = replace(sj, seq=i)
+                i += 1
+
+        self._by_wo = new_by_wo
+
+    # -------------------------
+    # Internal
+    # -------------------------
+
+    def _enforce_lock(self, sj: "ScheduledJob") -> None:
+        wo = str(sj.job.wo)
+        lk = self._locks.get(wo)
+        if not lk:
+            return
+
+        if lk.required_resource is not None:
+            req_line, req_dec = lk.required_resource
+            if (sj.line, sj.decorator) != (req_line, req_dec):
+                raise LockedJobError(
+                    f"WO {wo} locked to {req_line}/{req_dec}, got {sj.line}/{sj.decorator}."
+                )
+
+        if lk.fixed_seq is not None:
+            if int(sj.seq) != int(lk.fixed_seq):
+                raise LockedJobError(
+                    f"WO {wo} locked to seq {lk.fixed_seq}, got seq {sj.seq}."
+                )
 
 @dataclass(frozen=True, slots=True)
 class Job:
@@ -30,6 +236,7 @@ class Job:
 
 @dataclass(frozen=True, slots=True)
 class ScheduledJob:
+    line: str
     block: int
     decorator: str  
     seq: int
@@ -76,9 +283,10 @@ class Decorator:
         self.jobs.append(scheduled_job)
 
 class Scheduler:
-    def __init__(self, jobs, line):
+    def __init__(self, jobs, line, plant: PlantSchedule):
         self.pool = JobPool(jobs)
         self.line = line
+        self.plant = plant
 
 
         self.family_assignment = {}
@@ -102,7 +310,7 @@ class Scheduler:
         return self.line.decorator("B")
 
     @classmethod
-    def from_agg(cls, agg, line):
+    def from_agg(cls, agg, line,plant: PlantSchedule):
         jobs = []
         for r in agg.itertuples(index=False):
             val = getattr(r, "REQ_DATE", None)
@@ -123,7 +331,7 @@ class Scheduler:
                     erp_line=(None if pd.isna(getattr(r, "LINE", None)) else str(getattr(r, "LINE"))),
                 )
             )
-        return cls(jobs, line)
+        return cls(jobs, line, plant)
     
     def is_item_eligible(self, job, decorator_name: str) -> bool:
         it = job.item_number
@@ -295,16 +503,18 @@ class Scheduler:
         return candidates[:count]
 
     def schedule_job(self, decorator_name, block_no, job, role_in_block):
-        dec = self.decorator_object(decorator_name)
-        max_seq = max((sj.seq for sj in dec.jobs), default=0)
+        existing = self.plant.by_resource(self.line.name, decorator_name)
+        max_seq = max((int(sj.seq) for sj in existing), default=0)
         seq = max_seq + 1
-        dec.add(ScheduledJob(
+        sj = ScheduledJob(
+            line=self.line.name,
             block=block_no,
             decorator=decorator_name,
             seq=seq,
             role_in_block=role_in_block,
             job=job,
-        ))
+        )
+        self.plant.add(sj)
         self.last_family[decorator_name] = job.family
         self.last_color[decorator_name] = job.primary_color
         self.lock_item(job.item_number, decorator_name)
@@ -398,10 +608,10 @@ class Scheduler:
                 next_anchor_job = self.pick_largest_job(other_decorator) if self.pool.has_work() else None
 
             if next_anchor_job is not None:
+                # Reserve it for next loop iteration, but DON'T schedule it yet
                 self.lock_family(next_anchor_job.family, other_decorator)
                 self.lock_item(next_anchor_job.item_number, other_decorator)
-                self.remove_job(next_anchor_job.wo)
-                self.schedule_job(other_decorator, self.block_number, next_anchor_job, "NEXT_ANCHOR")
+                self.remove_job(next_anchor_job.wo)   # safe even if it came from pinned
                 self.forced_next_anchor = next_anchor_job
             else:
                 self.forced_next_anchor = None
@@ -423,8 +633,10 @@ class Scheduler:
 
         return self
 
-    def scheduled_jobs_dataframe(self, decorator):
+    def scheduled_jobs_dataframe(self, decorator_name: str):
+        jobs = self.plant.by_resource(self.line.name, decorator_name)
         return pd.DataFrame([{
+            "LINE": sj.line,
             "BLOCK": sj.block,
             "DECORATOR": sj.decorator,
             "SEQ": sj.seq,
@@ -438,12 +650,12 @@ class Scheduler:
             "ITEM_NUMBER": sj.job.item_number,
             "REQ_DATE": sj.job.req_date,
             "CAN_SIZE": sj.job.can_size,
-        } for sj in decorator.jobs])
+        } for sj in jobs])
 
     def results_to_dataframes(self):
         blocks_df = pd.DataFrame(self.block_summaries)
-        decorator_a_df = self.scheduled_jobs_dataframe(self.decorator_a)
-        decorator_b_df = self.scheduled_jobs_dataframe(self.decorator_b)
+        decorator_a_df = self.scheduled_jobs_dataframe("A")
+        decorator_b_df = self.scheduled_jobs_dataframe("B")
         family_assignment_df = pd.DataFrame(
             [{"FAMILY": fam, "DECORATOR": dec} for fam, dec in sorted(self.family_assignment.items())]
         )
@@ -703,96 +915,11 @@ def build_timeline_from_objects(
 
     return annotate_schedule(a_df), annotate_schedule(b_df), timeline_df
 
-def make_logic_timeline_sheet(timeline_df: pd.DataFrame) -> pd.DataFrame:
-    if timeline_df is None or timeline_df.empty:
-        return pd.DataFrame(columns=["TimeStart", "DecoratorRunning", "Description", "Qty"])
 
-    t = timeline_df.sort_values("START", kind="mergesort").reset_index(drop=True)
-
-    return pd.DataFrame({
-        "TimeStart": pd.to_datetime(t["START"]),
-        "DecoratorRunning": t["DECORATOR"].astype(str),
-        "Description": t["JOB_DESCRIPTION"].astype(str),
-        "Qty": pd.to_numeric(t["QTY_RUN"], errors="coerce").fillna(0).astype(int),
-    })
-
-def build_schedule(data, line):
-    sched = Scheduler.from_agg(data, line).run()
+def build_schedule(data, line, plant):
+    sched = Scheduler.from_agg(data, line, plant).run()
     return sched.results_to_dataframes()
 
-
-def build_line_view_sheet(a_data, b_data):
-    cols = [
-    "INDEX", "BLOCK",
-    "DecoA_WO", "A_ITEM_NUMBER", "A_QTY", "A_FAMILY", "A_PRIMARY_COLOR", "A_DESCRIPTION",
-    "DecoB_WO", "B_ITEM_NUMBER", "B_QTY", "B_FAMILY", "B_PRIMARY_COLOR", "B_DESCRIPTION",
-    ]
-
-    if a_data.empty and b_data.empty:
-        return pd.DataFrame(columns=cols)
-
-    a_sorted = a_data.sort_values(["BLOCK", "SEQ"], kind="mergesort") if not a_data.empty else a_data
-    b_sorted = b_data.sort_values(["BLOCK", "SEQ"], kind="mergesort") if not b_data.empty else b_data
-
-    all_blocks = sorted(set(a_sorted["BLOCK"]).union(b_sorted["BLOCK"]))
-
-    rows = []
-    row_index = 0
-
-    for block in all_blocks:
-        a_rows = a_sorted[a_sorted["BLOCK"] == block][
-            ["WO", "ITEM_NUMBER", "QTY", "FAMILY", "PRIMARY_COLOR", "DESCRIPTION"]
-        ].to_records(index=False).tolist()
-
-        b_rows = b_sorted[b_sorted["BLOCK"] == block][
-            ["WO", "ITEM_NUMBER", "QTY", "FAMILY", "PRIMARY_COLOR", "DESCRIPTION"]
-        ].to_records(index=False).tolist()
-
-        row_count = max(len(a_rows), len(b_rows), 1)
-
-        repeat_a_row = (len(a_rows) == 1 and row_count > 1)
-        repeat_b_row = (len(b_rows) == 1 and row_count > 1)
-
-        for i in range(row_count):
-            row_index += 1
-
-            if not a_rows:
-                a_wo = a_item = a_qty = a_family = a_color = a_desc = ""
-            elif repeat_a_row:
-                a_wo, a_item, a_qty, a_family, a_color, a_desc = a_rows[0]
-            elif i < len(a_rows):
-                a_wo, a_item, a_qty, a_family, a_color, a_desc = a_rows[i]
-            else:
-                a_wo = a_item = a_qty = a_family = a_color = a_desc = ""
-
-            # B side
-            if not b_rows:
-                b_wo = b_item = b_qty = b_family = b_color = b_desc = ""
-            elif repeat_b_row:
-                b_wo, b_item, b_qty, b_family, b_color, b_desc = b_rows[0]
-            elif i < len(b_rows):
-                b_wo, b_item, b_qty, b_family, b_color, b_desc = b_rows[i]
-            else:
-                b_wo = b_item = b_qty = b_family = b_color = b_desc = ""
-
-            rows.append({
-                "INDEX": row_index,
-                "BLOCK": block,
-                "DecoA_WO": a_wo,
-                "A_ITEM_NUMBER": a_item,
-                "A_QTY": a_qty,
-                "A_FAMILY": a_family if a_family != "UNKNOWN" else "",
-                "A_PRIMARY_COLOR": a_color,
-                "A_DESCRIPTION": a_desc,
-                "DecoB_WO": b_wo,
-                "B_ITEM_NUMBER": b_item,
-                "B_QTY": b_qty,
-                "B_FAMILY": b_family if b_family != "UNKNOWN" else "",
-                "B_PRIMARY_COLOR": b_color,
-                "B_DESCRIPTION": b_desc,
-            })
-
-    return pd.DataFrame(rows, columns=cols)
 
 def assign_jobs_to_lines_balanced(all_jobs, lines):
     buckets = {line.name: [] for line in lines}
@@ -838,45 +965,150 @@ def jobs_from_agg(agg) -> list[Job]:
         )
     return jobs
 
+def df_to_tuples(df, cols):
+    # Convert NaN/NaT to None so pyodbc sends NULL
+    out = df[cols].copy()
+    out = out.where(pd.notna(out), None)
+    return list(map(tuple, out.to_numpy()))
+
+def write_schedule_to_sqlserver(conn_str: str, work_orders_df: pd.DataFrame, schedule_df: pd.DataFrame):
+    wo_cols = ["wo", "qty", "family", "primary_color", "description", "item_number", "req_date", "can_size"]
+    sch_cols = ["wo", "line", "decorator", "seq", "block", "role_in_block"]
+
+    wo_rows = df_to_tuples(work_orders_df, wo_cols)
+    sch_rows = df_to_tuples(schedule_df, sch_cols)
+
+    insert_work_orders_sql = """
+        INSERT INTO dbo.work_orders
+        (wo, qty, family, primary_color, description, item_number, req_date, can_size)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+    """
+
+    insert_schedule_sql = """
+        INSERT INTO dbo.schedule
+        (wo, line, decorator, seq, block, role_in_block)
+        VALUES (?, ?, ?, ?, ?, ?);
+    """
+
+    with pyodbc.connect(conn_str) as conn:
+        conn.autocommit = False
+        cur = conn.cursor()
+
+        try:
+            # Full refresh (delete children first)
+            cur.execute("DELETE FROM dbo.schedule;")
+            cur.execute("DELETE FROM dbo.work_orders;")
+
+            # Fast bulk insert
+            cur.fast_executemany = True
+
+            if wo_rows:
+                cur.executemany(insert_work_orders_sql, wo_rows)
+
+            if sch_rows:
+                cur.executemany(insert_schedule_sql, sch_rows)
+
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            cur.close()
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("input_xlsx", help="Input Excel file path")
-    ap.add_argument("-o", "--output", default="Two_Decorator_Schedule_FamilyLocked.xlsx", help="Output Excel filename")
     args = ap.parse_args()
 
     in_path = Path(args.input_xlsx).expanduser().resolve()
-    out_path = Path(args.output).expanduser().resolve()
     start_time = "2025-12-30 06:00"
 
     data = load_and_clean(in_path)
-    all_jobs = jobs_from_agg(data) #new
+    all_jobs = jobs_from_agg(data) 
+
+    plant = PlantSchedule()
 
     line_4 = Line(name="LINE4", daily_capacity=0, decorator_names=("A", "B"),can_run_fn=lambda job: job.can_size == "710")
-    lines = [line_4] #new
-    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines) #new
-    sched4 = Scheduler(buckets["LINE4"], line_4).run() #new
+    lines = [line_4] 
+    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines) 
+    sched4 = Scheduler(buckets["LINE4"], line_4, plant).run()
     blocks_data, deco_a_data, deco_b_data, family_data = sched4.results_to_dataframes()
+    schedule_df = pd.concat([deco_a_data, deco_b_data], ignore_index=True)
 
-    #blocks_data, deco_a_data, deco_b_data, family_data = build_schedule(data, line_4)
+    # match dbo.schedule columns exactly
+    schedule_df = schedule_df.rename(columns={
+        "LINE": "line",
+        "DECORATOR": "decorator",
+        "SEQ": "seq",
+        "BLOCK": "block",
+        "ROLE_IN_BLOCK": "role_in_block",
+        "WO": "wo",
+    })[["wo", "line", "decorator", "seq", "block", "role_in_block"]]
+
+    # enforce types
+    schedule_df["wo"] = schedule_df["wo"].astype(str)
+    schedule_df["line"] = schedule_df["line"].astype(str)
+    schedule_df["decorator"] = schedule_df["decorator"].astype(str)
+    schedule_df["seq"] = schedule_df["seq"].astype(int)
+    schedule_df["block"] = schedule_df["block"].astype(int)
+    schedule_df["role_in_block"] = schedule_df["role_in_block"].astype(str)
+
+    work_orders_df = pd.concat([deco_a_data, deco_b_data], ignore_index=True)
+
+    work_orders_df = (
+        work_orders_df.rename(columns={
+            "WO": "wo",
+            "QTY": "qty",
+            "FAMILY": "family",
+            "PRIMARY_COLOR": "primary_color",
+            "DESCRIPTION": "description",
+            "ITEM_NUMBER": "item_number",
+            "REQ_DATE": "req_date",
+            "CAN_SIZE": "can_size",
+        })[
+            ["wo", "qty", "family", "primary_color", "description", "item_number", "req_date", "can_size"]
+        ]
+    )
+
+    # Enforce types + normalize nulls
+    work_orders_df["wo"] = work_orders_df["wo"].astype(str)
+    work_orders_df["qty"] = pd.to_numeric(work_orders_df["qty"], errors="coerce").fillna(0).astype(int)
+
+    for col in ["family", "primary_color", "description", "item_number", "can_size"]:
+        work_orders_df[col] = work_orders_df[col].where(pd.notna(work_orders_df[col]), None)
+
+    # datetime null handling (NaT -> None)
+    work_orders_df["req_date"] = pd.to_datetime(work_orders_df["req_date"], errors="coerce")
+    work_orders_df["req_date"] = work_orders_df["req_date"].where(work_orders_df["req_date"].notna(), None)
+
+    # Deduplicate by WO (keep first)
+    work_orders_df = work_orders_df.drop_duplicates(subset=["wo"], keep="first").reset_index(drop=True)
+    conn_str = (
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    "SERVER=dscsqc;"
+    "DATABASE=SchedulePlanning;"
+    "Trusted_Connection=yes;"
+    )
+    write_schedule_to_sqlserver(conn_str, work_orders_df, schedule_df)
+
+    # timeline uses the ScheduledJob objects; fetch them from plant
+    deco_a_objs = plant.by_resource("LINE4", "A")
+    deco_b_objs = plant.by_resource("LINE4", "B")
 
     deco_a_data, deco_b_data, timeline_df = build_timeline_from_objects(
-    line_4.decorator("A").jobs,
-    line_4.decorator("B").jobs,
-    start_time=start_time,
-)
+        deco_a_objs,
+        deco_b_objs,
+        start_time=start_time,
+    )
+
     export_timeline_json(
     timeline_df,
-    out_path.with_suffix(".timeline.json"),
+    Path("output.timeline.json"),
     start_time=start_time,
     deco_a_df=deco_a_data,
     deco_b_df=deco_b_data,
 )
-    logic_timeline_df = make_logic_timeline_sheet(timeline_df)
-    # Build the line view sheet
-    line_view_data = build_line_view_sheet(deco_a_data, deco_b_data)
 
-    write_excel(out_path, blocks_data, deco_a_data, deco_b_data, line_view_data, family_data, logic_timeline_df)
-    print(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":
