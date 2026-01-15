@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-01-12T12:34:39",
+    "generated_at": "2026-01-13T08:23:14",
     "start_time": "2025-12-30 06:00",
     "segment_count": 40
   },
@@ -749,8 +749,8 @@
         "item_number": "604-07140",
         "description": "Lysol Air Sanitzer Mountain",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-30T06:00:00",
-        "planned_finish": "2025-12-30T12:10:08.275862"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -763,8 +763,8 @@
         "item_number": "604-07658",
         "description": "Lysol Air Sani Cotton Bloss",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-30T16:04:25.655172",
-        "planned_finish": "2025-12-30T21:54:59.586206"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 5,
@@ -777,8 +777,8 @@
         "item_number": "604-05315",
         "description": "DDA Dawn Bakery Essentials",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-31T00:19:36.827585",
-        "planned_finish": "2025-12-31T03:32:26.482757"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 7,
@@ -791,8 +791,8 @@
         "item_number": "604-05548",
         "description": "Amway Prewash Korea 9006127",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T05:11:30.206895",
-        "planned_finish": "2025-12-31T06:45:50.896550"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 9,
@@ -805,8 +805,8 @@
         "item_number": "604-07615",
         "description": "Lysol Air Beachside Waves 10oz",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-31T07:51:53.379309",
-        "planned_finish": "2025-12-31T09:24:47.172412"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 11,
@@ -819,8 +819,8 @@
         "item_number": "604-07252",
         "description": "Amway Prewash Spray RK",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T10:26:06.620688",
-        "planned_finish": "2025-12-31T11:21:55.862067"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 13,
@@ -833,8 +833,8 @@
         "item_number": "604-07877",
         "description": "SOSO Water Proofer No PFAS",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T12:18:32.275860",
-        "planned_finish": "2025-12-31T13:00:59.586205"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 15,
@@ -847,8 +847,8 @@
         "item_number": "604-05430",
         "description": "A27  Rouses Swetned X-Tra Crmy",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-31T14:25:54.206895",
-        "planned_finish": "2025-12-31T15:01:04.551723"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 17,
@@ -861,8 +861,8 @@
         "item_number": "604-05423",
         "description": "A60  Rouses Orignl Whip Tppng",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-31T16:21:16.137930",
-        "planned_finish": "2025-12-31T16:56:26.482758"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 19,
@@ -875,8 +875,8 @@
         "item_number": "604-07789",
         "description": "Amway Home Prewash A2501183",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T17:34:10.758620",
-        "planned_finish": "2025-12-31T18:07:11.999999"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 21,
@@ -889,8 +889,8 @@
         "item_number": "604-07799",
         "description": "Amway Home Prewash A2501193",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T18:44:56.275861",
-        "planned_finish": "2025-12-31T19:17:57.517240"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 23,
@@ -903,8 +903,8 @@
         "item_number": "604-07814",
         "description": "Amway Home Prewash A2501191",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T20:28:43.034481",
-        "planned_finish": "2025-12-31T21:01:44.275860"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 25,
@@ -917,8 +917,8 @@
         "item_number": "604-07777",
         "description": "Valvoline A/C Foam Cleaner",
         "req_date": "2026-01-12T00:00:00",
-        "planned_start": "2025-12-31T21:58:20.689653",
-        "planned_finish": "2025-12-31T22:54:57.103446"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 27,
@@ -931,8 +931,8 @@
         "item_number": "604-06692",
         "description": "RW for Fruit 6.5oz",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T23:42:07.448274",
-        "planned_finish": "2026-01-01T00:29:17.793102"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 29,
@@ -945,8 +945,8 @@
         "item_number": "604-07016",
         "description": "Lubriplate Gear Shield",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2026-01-01T01:16:28.137930",
-        "planned_finish": "2026-01-01T02:03:38.482758"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 31,
@@ -959,8 +959,8 @@
         "item_number": "604-07729",
         "description": "Pro Honda Carburetor Clnr",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2026-01-01T02:43:44.275861",
-        "planned_finish": "2026-01-01T03:16:13.241378"
+        "planned_start": null,
+        "planned_finish": null
       }
     ],
     "B": [
@@ -975,8 +975,8 @@
         "item_number": "604-07908",
         "description": "Jax108 Dry-Glide 10oz",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-30T08:04:08.275862",
-        "planned_finish": "2025-12-30T08:51:18.620690"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 2,
@@ -989,8 +989,8 @@
         "item_number": "604-07317",
         "description": "AL2 Whipt Coconut 6.5oz",
         "req_date": "2026-01-12T00:00:00",
-        "planned_start": "2025-12-30T12:10:08.275862",
-        "planned_finish": "2025-12-30T16:04:25.655172"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -1003,8 +1003,8 @@
         "item_number": "604-06128",
         "description": "DG Disinfectant - Hawaiian",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-30T18:08:33.931034",
-        "planned_finish": "2025-12-30T19:09:53.379310"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 4,
@@ -1017,8 +1017,8 @@
         "item_number": "604-00833",
         "description": "WHITE Print DOT 2Q Plastic",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-30T21:54:59.586206",
-        "planned_finish": "2025-12-31T00:19:36.827585"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 6,
@@ -1031,8 +1031,8 @@
         "item_number": "604-07560",
         "description": "Galv-Match Plus 1",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T03:32:26.482757",
-        "planned_finish": "2025-12-31T05:11:30.206895"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 8,
@@ -1045,8 +1045,8 @@
         "item_number": "604-06762",
         "description": "Auto Solution MOC Optimizer",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T06:45:50.896550",
-        "planned_finish": "2025-12-31T07:51:53.379309"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 10,
@@ -1059,8 +1059,8 @@
         "item_number": "604-06801",
         "description": "Lucas Oil CLP Lube",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T09:24:47.172412",
-        "planned_finish": "2025-12-31T10:26:06.620688"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 12,
@@ -1073,8 +1073,8 @@
         "item_number": "604-06708",
         "description": "NOCO NCP2 A202 Batt corr.",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T11:21:55.862067",
-        "planned_finish": "2025-12-31T12:18:32.275860"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 14,
@@ -1087,8 +1087,8 @@
         "item_number": "604-07297",
         "description": "Blaster Battery Terminal Clnr",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T13:00:59.586205",
-        "planned_finish": "2025-12-31T14:25:54.206895"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 16,
@@ -1101,8 +1101,8 @@
         "item_number": "604-07693",
         "description": "LW Chain & Cable Lube",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T15:01:04.551723",
-        "planned_finish": "2025-12-31T16:21:16.137930"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 18,
@@ -1115,8 +1115,8 @@
         "item_number": "604-06492",
         "description": "Berryman Electronic Clnr 11oz",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T16:56:26.482758",
-        "planned_finish": "2025-12-31T17:34:10.758620"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 20,
@@ -1129,8 +1129,8 @@
         "item_number": "604-03362",
         "description": "BERRYMAN MASS AIR FLOW SENSOR",
         "req_date": "2026-01-17T00:00:00",
-        "planned_start": "2025-12-31T18:07:11.999999",
-        "planned_finish": "2025-12-31T18:44:56.275861"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 22,
@@ -1143,8 +1143,8 @@
         "item_number": "604-07404",
         "description": "Titeseal Tire Repair TSTR14/6",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T19:17:57.517240",
-        "planned_finish": "2025-12-31T20:28:43.034481"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 24,
@@ -1157,8 +1157,8 @@
         "item_number": "604-05702",
         "description": "Galvanizing Spray AZZ-100",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T21:01:44.275860",
-        "planned_finish": "2025-12-31T21:58:20.689653"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 26,
@@ -1171,8 +1171,8 @@
         "item_number": "604-07758",
         "description": "AQ5 Tops OG Light WC 6.5oz",
         "req_date": "2026-01-17T00:00:00",
-        "planned_start": "2025-12-31T22:54:57.103446",
-        "planned_finish": "2025-12-31T23:42:07.448274"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 28,
@@ -1185,8 +1185,8 @@
         "item_number": "604-07552",
         "description": "Kraft Cool Whip Reg 225g",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2026-01-01T00:29:17.793102",
-        "planned_finish": "2026-01-01T01:16:28.137930"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 30,
@@ -1199,8 +1199,8 @@
         "item_number": "604-07167",
         "description": "Blaster Cable & Chain Lube",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2026-01-01T02:03:38.482758",
-        "planned_finish": "2026-01-01T02:43:44.275861"
+        "planned_start": null,
+        "planned_finish": null
       }
     ]
   }

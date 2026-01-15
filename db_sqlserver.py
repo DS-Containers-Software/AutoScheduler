@@ -70,7 +70,7 @@ def input_df_from_cleaned(data: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def dataframes_from_plant(plant: "PlantSchedule") -> Tuple[pd.DataFrame, pd.DataFrame]:
+def dataframes_from_plant(plant) -> Tuple[pd.DataFrame, pd.DataFrame]:
     all_sjs = plant.all()
 
     schedule_df = pd.DataFrame([{

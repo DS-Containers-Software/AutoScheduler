@@ -21,6 +21,7 @@
       height: calc(100vh - 54px);
       min-height: 0;
     }
+    
 
     .lists {
       border-right: 1px solid #ddd;
@@ -46,6 +47,7 @@
       flex-direction: column;
       min-height: 200px;
     }
+
 
     .list h3 {
       margin: 0;
@@ -115,6 +117,33 @@
       border-radius: 999px;
       background: #f8f8f8;
       color: #444;
+    }
+    .vis-item.vis-background.down-bg {
+      background: #f2f2f2;
+      border: none;
+      opacity: 1;
+    }
+
+    /* Optional: hatch pattern so it’s unmistakable */
+    .vis-item.vis-background.down-bg {
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgba(0,0,0,0.06) 0,
+        rgba(0,0,0,0.06) 6px,
+        rgba(0,0,0,0.00) 6px,
+        rgba(0,0,0,0.00) 12px
+      );
+    }
+    #timeline .vis-timeline,
+    #timeline .vis-panel,
+    #timeline .vis-center,
+    #timeline .vis-itemset {
+      overflow: visible !important;
+    }
+
+    /* Make tooltip sit above everything */
+    .vis-tooltip {
+      z-index: 999999 !important;
     }
 
     /* Drop indicator */
@@ -190,15 +219,26 @@
     function makeTimelineDatasets(payload) {
       const groups = new vis.DataSet(payload.groups.map(g => ({ id: g.id, content: g.label })));
 
-      const items = new vis.DataSet(payload.items.map(it => ({
-        id: it.id,
-        group: it.group,
-        start: it.start,
-        end: it.end,
-        content: escapeHtml(it.label),
-        title: buildTooltip(it),
-        data: it.data
-      })));
+      const items = new vis.DataSet(payload.items.map(it => {
+        const isDown = (it?.data?.type === 'DOWN') || (it?.data?.role === 'DOWN');
+
+        return {
+          id: it.id,
+          group: it.group,
+          start: it.start,
+          end: it.end,
+
+          // Key change:
+          type: isDown ? 'background' : (it.type ?? 'range'),
+
+          // Make downtime items truly “blank”: no label, no tooltip
+          content: isDown ? '' : escapeHtml(it.label),
+          title: isDown ? '' : buildTooltip(it),
+
+          className: isDown ? 'down-bg' : (it.className ?? ''),
+          data: it.data
+        };
+      }));
 
       return { groups, items };
     }
@@ -395,10 +435,19 @@
         stack: false,
         showCurrentTime: false,
         zoomKey: 'ctrlKey',
-        tooltip: { followMouse: true },
+        tooltip: { followMouse: true,
+                  overflowMethod: 'flip' 
+
+        },
         horizontalScroll: true,
         maxHeight: '100%',
-        editable: true,
+        editable: {
+          add: false,
+          remove: false,
+          updateTime: true,
+          updateGroup: true,
+          overrideItems: false
+        },
         start: start,
         end: end,
         zoomMax: 12 * 60 * 60 * 1000,

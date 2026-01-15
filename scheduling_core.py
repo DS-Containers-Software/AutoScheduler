@@ -1,24 +1,52 @@
 from __future__ import annotations
-from datetime import datetime, timedelta
-import json
-import argparse
-import math
-from pathlib import Path
-from collections import deque, defaultdict
-import pandas as pd
-from cleaning_utils import load_and_clean
-from exporters import export_timeline_json
-import re
+
 from dataclasses import dataclass, field, replace
-from typing import Dict, Iterable, List, Optional, Tuple, Callable, Set, Any, Protocol, NamedTuple
-from db_sqlserver import (input_df_from_cleaned, write_input_to_sqlserver, dataframes_from_plant, write_schedule_to_sqlserver)
-import pyodbc
+from datetime import datetime, timedelta
+from collections import deque, defaultdict
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    NamedTuple,
+    Optional,
+    Protocol,
+    Set,
+    Tuple,
+)
+import math
+import re
+
+import pandas as pd
+
+
+# ----------------------------
+# Types / Exceptions
+# ----------------------------
 
 ResourceKey = Tuple[str, str]  # (line, decorator)
-class ScheduleError(Exception):pass
-class DuplicateWOError(ScheduleError):pass
-class LockedJobError(ScheduleError):pass
-class ValidationError(ScheduleError):pass
+
+
+class ScheduleError(Exception):
+    pass
+
+
+class DuplicateWOError(ScheduleError):
+    pass
+
+
+class LockedJobError(ScheduleError):
+    pass
+
+
+class ValidationError(ScheduleError):
+    pass
+
+
+# ----------------------------
+# Locking model
+# ----------------------------
 
 @dataclass(frozen=True, slots=True)
 class JobLock:
@@ -33,6 +61,11 @@ class JobLock:
     fixed_seq: Optional[int] = None
     frozen: bool = True
     reason: str = ""
+
+
+# ----------------------------
+# Production clocks
+# ----------------------------
 
 class ProductionClock(Protocol):
     """Advance time by producing qty, returning (new_cur, pieces)."""
@@ -53,7 +86,7 @@ class ConstantRateClock:
 
         hours = float(qty) / float(self.rate_cph)
         end = cur + timedelta(seconds=hours * 3600.0)
-        return end, [{"START": cur, "FINISH": end, "QTY_RUN": int(qty)}]
+        return end, [{"TYPE": "RUN", "START": cur, "FINISH": end, "QTY_RUN": int(qty)}]
 
 
 @dataclass
@@ -73,7 +106,6 @@ def _floor_to_hour(dt: datetime) -> datetime:
     return dt.replace(minute=0, second=0, microsecond=0)
 
 
-
 def consume_qty_with_hourly_calendar(
     cur: datetime,
     qty: int,
@@ -85,7 +117,7 @@ def consume_qty_with_hourly_calendar(
     Produce `qty` at `rate_cph` while respecting hourly downtime.
     Returns (new_cur, pieces).
 
-    pieces: list of {"START": dt, "FINISH": dt, "QTY_RUN": int}
+    pieces: list of {"TYPE": "RUN"|"DOWN", "START": dt, "FINISH": dt, "QTY_RUN": int}
     """
     if qty <= 0:
         return cur, []
@@ -167,7 +199,8 @@ class HourlyCalendarClock:
 
     def consume(self, cur: datetime, qty: int) -> tuple[datetime, list[dict[str, Any]]]:
         return consume_qty_with_hourly_calendar(cur, qty, rate_cph=self.rate_cph, cal=self.cal)
-    
+
+
 def clone_clock(clock: ProductionClock) -> ProductionClock:
     """
     Return a copy of the clock that can be mutated in 'what-if' simulations
@@ -183,6 +216,10 @@ def clone_clock(clock: ProductionClock) -> ProductionClock:
     raise TypeError(f"Unsupported clock type: {type(clock)}")
 
 
+# ----------------------------
+# Slack / due-date helpers
+# ----------------------------
+
 def is_late(finish: datetime, req_date: Optional[datetime]) -> bool:
     if req_date is None:
         return False
@@ -195,10 +232,30 @@ def slack_hours(finish: datetime, req_date: Optional[datetime]) -> float:
     return (req_date - finish).total_seconds() / 3600.0
 
 
+# ----------------------------
+# Core simulation primitive
+# ----------------------------
+
 class BlockSimResult(NamedTuple):
     end_time: datetime
     wo_finish: dict[str, datetime]   # finish time for each WO in block
     min_slack_hrs: float             # min slack across block jobs (req_date only)
+
+
+@dataclass(frozen=True, slots=True)
+class Job:
+    wo: str
+    qty: int
+    color_rank: int
+    family: str = "UNKNOWN"
+    primary_color: str = "UNKNOWN"
+    description: str = ""
+    item_number: Optional[str] = None
+    required_decorator: Optional[str] = None
+    erp_seq: int = 0
+    req_date: datetime | None = None
+    can_size: str = ""
+    erp_line: Optional[str] = None
 
 
 def simulate_block(
@@ -221,12 +278,9 @@ def simulate_block(
 
     cur = start_time
     producing = anchor_deco
-    other_deco = "B" if anchor_deco == "A" else "A"
 
-    # Setup progress model (same as build_timeline_from_objects)
     setup_progress = {"A": setup_equiv_qty, "B": setup_equiv_qty}
 
-    # State
     anchor_done = 0
     small_states = [{"job": j, "done": 0} for j in small_jobs]
     small_idx = 0
@@ -246,7 +300,6 @@ def simulate_block(
     def next_job_ready(d: str) -> bool:
         if d == anchor_deco:
             return anchor_remaining() > 0 and setup_progress[d] >= setup_equiv_qty
-        # small jobs live on the other decorator only
         return small_idx < len(small_states) and setup_progress[d] >= setup_equiv_qty
 
     def run_qty_for(d: str) -> tuple[str, Optional[datetime], int]:
@@ -271,23 +324,20 @@ def simulate_block(
                 small_idx += 1
                 setup_progress[d] = 0
 
-    # Run until both anchor and all smalls complete
     while anchor_remaining() > 0 or small_idx < len(small_states):
         if not next_job_ready(producing):
             if next_job_ready(other(producing)):
                 producing = other(producing)
             else:
-                # force setup complete if both are blocked (matches your original behavior)
                 setup_progress[producing] = setup_equiv_qty
 
         if not next_job_ready(producing):
-            break  # defensive
+            break
 
-        wo, req, qty_plan = run_qty_for(producing)
+        wo, _req, qty_plan = run_qty_for(producing)
         if qty_plan <= 0:
             break
 
-        # producing qty contributes to other decorator's setup progress
         setup_progress[other(producing)] = min(
             setup_equiv_qty,
             setup_progress[other(producing)] + int(qty_plan),
@@ -299,18 +349,31 @@ def simulate_block(
         if next_job_ready(other(producing)):
             producing = other(producing)
 
-    # compute min slack among block jobs (only those with req_date)
     min_slack = float("inf")
     for j in [anchor_job] + [x["job"] for x in small_states]:
         fin = wo_finish.get(j.wo)
         if fin is None:
-            # if something weird happened, treat as worst case
             min_slack = -float("inf")
             continue
         min_slack = min(min_slack, slack_hours(fin, j.req_date))
 
     return BlockSimResult(end_time=cur, wo_finish=wo_finish, min_slack_hrs=min_slack)
-    
+
+
+# ----------------------------
+# Plant schedule container
+# ----------------------------
+
+@dataclass(frozen=True, slots=True)
+class ScheduledJob:
+    line: str
+    block: int
+    decorator: str
+    seq: int
+    role_in_block: str
+    job: Job
+
+
 @dataclass
 class PlantSchedule:
     """
@@ -319,7 +382,7 @@ class PlantSchedule:
     Key invariant (no WO splitting):
       - each WO appears at most once across the entire schedule
     """
-    _by_wo: Dict[str, "ScheduledJob"] = field(default_factory=dict)
+    _by_wo: Dict[str, ScheduledJob] = field(default_factory=dict)
     _locks: Dict[str, JobLock] = field(default_factory=dict)
 
     def lock(self, wo: str, lock: JobLock) -> None:
@@ -335,7 +398,7 @@ class PlantSchedule:
         lk = self._locks.get(str(wo))
         return bool(lk and lk.frozen)
 
-    def add(self, sj: "ScheduledJob") -> None:
+    def add(self, sj: ScheduledJob) -> None:
         wo = str(sj.job.wo)
         if wo in self._by_wo:
             existing = self._by_wo[wo]
@@ -346,11 +409,7 @@ class PlantSchedule:
         self._enforce_lock(sj)
         self._by_wo[wo] = sj
 
-    def upsert(self, sj: "ScheduledJob", *, force: bool = False) -> None:
-        """
-        Replace or insert. Use this for manual edits.
-        If the WO is frozen, you must pass force=True (or unlock first).
-        """
+    def upsert(self, sj: ScheduledJob, *, force: bool = False) -> None:
         wo = str(sj.job.wo)
         if self.is_frozen(wo) and not force:
             raise LockedJobError(f"WO {wo} is frozen; unlock or use force=True.")
@@ -363,21 +422,21 @@ class PlantSchedule:
             raise LockedJobError(f"WO {wo} is frozen; unlock or use force=True.")
         self._by_wo.pop(wo, None)
 
-    def get(self, wo: str) -> Optional["ScheduledJob"]:
+    def get(self, wo: str) -> Optional[ScheduledJob]:
         return self._by_wo.get(str(wo))
 
-    def all(self) -> List["ScheduledJob"]:
+    def all(self) -> List[ScheduledJob]:
         return list(self._by_wo.values())
 
     def resources(self) -> Set[ResourceKey]:
         return {(sj.line, sj.decorator) for sj in self._by_wo.values()}
 
-    def by_line(self, line: str) -> List["ScheduledJob"]:
+    def by_line(self, line: str) -> List[ScheduledJob]:
         out = [sj for sj in self._by_wo.values() if sj.line == line]
         out.sort(key=lambda sj: (sj.decorator, int(sj.seq)))
         return out
 
-    def by_resource(self, line: str, decorator: str) -> List["ScheduledJob"]:
+    def by_resource(self, line: str, decorator: str) -> List[ScheduledJob]:
         out = [sj for sj in self._by_wo.values() if sj.line == line and sj.decorator == decorator]
         out.sort(key=lambda sj: int(sj.seq))
         return out
@@ -385,21 +444,18 @@ class PlantSchedule:
     def validate(
         self,
         *,
-        can_run: Optional[Callable[["ScheduledJob"], bool]] = None,
+        can_run: Optional[Callable[[ScheduledJob], bool]] = None,
         require_unique_seq: bool = True,
     ) -> None:
-        # Validate lock compliance for all scheduled jobs
         for sj in self._by_wo.values():
             self._enforce_lock(sj)
 
-        # Feasibility hook
         if can_run is not None:
             bad = [sj for sj in self._by_wo.values() if not can_run(sj)]
             if bad:
                 sample = ", ".join(f"{x.job.wo}@{x.line}/{x.decorator}" for x in bad[:10])
                 raise ValidationError(f"Infeasible jobs in schedule (sample): {sample}")
 
-        # Seq uniqueness per resource
         if require_unique_seq:
             seen: Dict[ResourceKey, Set[int]] = {}
             for sj in self._by_wo.values():
@@ -411,7 +467,7 @@ class PlantSchedule:
                 seen[rk].add(s)
 
     def normalize_sequences(self) -> None:
-        grouped: Dict[ResourceKey, List["ScheduledJob"]] = {}
+        grouped: Dict[ResourceKey, List[ScheduledJob]] = {}
         for sj in self._by_wo.values():
             grouped.setdefault((sj.line, sj.decorator), []).append(sj)
 
@@ -419,8 +475,8 @@ class PlantSchedule:
 
         for rk, lst in grouped.items():
             lst.sort(key=lambda sj: int(sj.seq))
-            fixed_map: Dict[int, "ScheduledJob"] = {}
-            movable: List["ScheduledJob"] = []
+            fixed_map: Dict[int, ScheduledJob] = {}
+            movable: List[ScheduledJob] = []
 
             for sj in lst:
                 lk = self._locks.get(str(sj.job.wo))
@@ -449,7 +505,7 @@ class PlantSchedule:
 
         self._by_wo = new_by_wo
 
-    def _enforce_lock(self, sj: "ScheduledJob") -> None:
+    def _enforce_lock(self, sj: ScheduledJob) -> None:
         wo = str(sj.job.wo)
         lk = self._locks.get(wo)
         if not lk:
@@ -468,62 +524,10 @@ class PlantSchedule:
                     f"WO {wo} locked to seq {lk.fixed_seq}, got seq {sj.seq}."
                 )
 
-def read_line_hourly_status(
-    conn_str: str,
-    line: str,
-    start_dt,
-    end_dt,
-) -> pd.DataFrame:
-    start_dt = pd.to_datetime(start_dt).to_pydatetime()
-    end_dt = pd.to_datetime(end_dt).to_pydatetime()
 
-    sql = """
-    SELECT Line, HourStart, IsDown, IsRunning
-    FROM dbo.vLineHourlyStatus
-    WHERE Line = ?
-      AND HourStart >= ?
-      AND HourStart < ?
-    ORDER BY HourStart;
-    """
-
-    with pyodbc.connect(conn_str) as cn:
-        cur = cn.cursor()
-        cur.execute(sql, (line, start_dt, end_dt))
-        rows = cur.fetchall()
-        cols = [c[0] for c in cur.description]
-
-    df = pd.DataFrame.from_records(rows, columns=cols)
-
-    if not df.empty:
-        df["HourStart"] = pd.to_datetime(df["HourStart"])
-        df["IsDown"] = df["IsDown"].astype(int)
-        df["IsRunning"] = df["IsRunning"].astype(int)
-
-    return df
-
-@dataclass(frozen=True, slots=True)
-class Job:
-    wo: str
-    qty: int
-    color_rank: int
-    family: str = "UNKNOWN"
-    primary_color: str = "UNKNOWN"
-    description: str = ""
-    item_number: Optional[str] = None
-    required_decorator: Optional[str] = None
-    erp_seq: int = 0 
-    req_date: datetime | None = None
-    can_size: str = ""
-    erp_line: Optional[str] = None
-
-@dataclass(frozen=True, slots=True)
-class ScheduledJob:
-    line: str
-    block: int
-    decorator: str  
-    seq: int
-    role_in_block: str
-    job: Job
+# ----------------------------
+# Line / eligibility model
+# ----------------------------
 
 class JobPool:
     def __init__(self, jobs: list[Job]):
@@ -538,6 +542,7 @@ class JobPool:
     def has_work(self) -> bool:
         return bool(self._by_wo)
 
+
 class Line:
     def __init__(self, name, daily_capacity, decorator_names=("A", "B"), *, can_run_fn=None):
         self.name = name
@@ -547,64 +552,60 @@ class Line:
             raise ValueError("Line must have exactly 2 decorators")
         self._can_run_fn = can_run_fn or (lambda job: True)
 
-    def can_run(self, job):
+    def can_run(self, job: Job):
         return bool(self._can_run_fn(job))
 
-    def decorator(self, name):
+    def decorator(self, name: str):
         return self.decorators[name]
 
-    def other_decorator(self, name):
+    def other_decorator(self, name: str):
         return next(k for k in self.decorators if k != name)
+
 
 class Decorator:
     def __init__(self, name):
         self.name = name
-        self.jobs = []  # ordered
+        self.jobs = []
 
-    def add(self, scheduled_job):
+    def add(self, scheduled_job: ScheduledJob):
         self.jobs.append(scheduled_job)
+
+
+# ----------------------------
+# Scheduler (sorting algorithm)
+# ----------------------------
 
 class Scheduler:
     """
-    Scheduler with deadline-aware "promotion":
-    - If a job with a req_date would be late unless it is scheduled NOW as the anchor on its decorator,
-      we force it to be the next anchor (even if it's < 60k).
-    - Still respects pinned ERP protected prefixes (those stay anchors as required).
-    - Uses downtime-aware simulate_block() to evaluate feasibility and slack.
+    Scheduler with deadline-aware "promotion".
+    Keeps your object models & algorithm together for easy LLM handoff.
     """
 
-    def __init__(self, jobs, line, plant: PlantSchedule, *, clock: ProductionClock, start_time: datetime):
+    def __init__(self, jobs: list[Job], line: Line, plant: PlantSchedule, *, clock: ProductionClock, start_time: datetime):
         self.pool = JobPool(jobs)
         self.line = line
         self.plant = plant
         self.clock = clock
         self.cur_time = start_time
 
-        self.family_assignment = {}
+        self.family_assignment: dict[str, str] = {}
         self.last_family = {"A": None, "B": None}
         self.last_color = {"A": None, "B": None}
-        self.block_summaries = []
+        self.block_summaries: list[dict[str, Any]] = []
 
         self.block_number = 0
         self.preferred_anchor_decorator = "A"
-        self.forced_next_anchor = None
         self.pinned = {"A": deque(), "B": deque()}
-        self.item_assignment = {}          # item_number -> decorator
+        self.item_assignment: dict[str, str] = {}
         self.last_item = {"A": None, "B": None}
 
-        # tuning knobs
         self._anchor_slice_qty = 60_000
         self._setup_equiv_qty = 60_000
 
-    @property
-    def decorator_a(self):
-        return self.line.decorator("A")
+        # populated by seed_pinned_jobs
+        self.erp_locked: dict[str, set[str]] = {"A": set(), "B": set()}
 
-    @property
-    def decorator_b(self):
-        return self.line.decorator("B")
-
-    def is_item_eligible(self, job, decorator_name: str) -> bool:
+    def is_item_eligible(self, job: Job, decorator_name: str) -> bool:
         it = job.item_number
         if not it:
             return True
@@ -616,17 +617,44 @@ class Scheduler:
         if item_number not in self.item_assignment:
             self.item_assignment[item_number] = decorator_name
 
-    def pop_pinned(self, decorator_name):
+    def remove_job(self, wo: str) -> None:
+        self.pool.remove_wo(wo)
+
+    def remove_pinned_wo(self, decorator_name: str, wo: str) -> bool:
         q = self.pinned.get(decorator_name)
-        if q:
-            return q.popleft()
-        return None
+        if not q:
+            return False
+        for j in list(q):
+            if j.wo == wo:
+                q.remove(j)
+                return True
+        return False
+
+    def _remove_job_everywhere(self, decorator_name: str, wo: str) -> bool:
+        if self.remove_pinned_wo(decorator_name, wo):
+            return True
+        self.remove_job(wo)
+        return False
+
+    def is_eligible(self, job: Job, decorator_name: str) -> bool:
+        if job.required_decorator in ("A", "B") and job.required_decorator != decorator_name:
+            return False
+
+        if not self.is_item_eligible(job, decorator_name):
+            return False
+
+        fam = job.family
+        if fam == "UNKNOWN":
+            return True
+        return (fam not in self.family_assignment) or (self.family_assignment[fam] == decorator_name)
+
+    def lock_family(self, family: str, decorator_name: str) -> None:
+        if family == "UNKNOWN":
+            return
+        if family not in self.family_assignment:
+            self.family_assignment[family] = decorator_name
 
     def pin_item_siblings(self, item_number: Optional[str], decorator_name: str) -> None:
-        """
-        Find remaining jobs with same ITEM_NUMBER and push them to the front of the same
-        decorator's pinned queue so they schedule next (keeping items together across WOs).
-        """
         if not item_number:
             return
 
@@ -634,11 +662,10 @@ class Scheduler:
         if not sibs:
             return
 
-        # Keep a sensible order; tweak as desired
         sibs.sort(key=lambda j: (-int(j.qty), int(getattr(j, "erp_seq", 0) or 0), j.wo))
 
         q = self.pinned[decorator_name]
-        erp_mode = bool(self.erp_locked.get(decorator_name))  # protection active for that decorator
+        erp_mode = bool(self.erp_locked.get(decorator_name))
         for j in sibs:
             if erp_mode:
                 q.append(j)
@@ -646,30 +673,51 @@ class Scheduler:
                 q.appendleft(j)
             self.pool.remove_wo(j.wo)
 
-    def seed_pinned_jobs(self, qty_cap_per_decorator=200_000):
-        # Track which WOs are in the protected prefix (optional, but useful)
-        self.erp_locked = {"A": set(), "B": set()}
+    def schedule_job(self, decorator_name: str, block_no: int, job: Job, role_in_block: str) -> None:
+        existing = self.plant.by_resource(self.line.name, decorator_name)
+        max_seq = max((int(sj.seq) for sj in existing), default=0)
 
+        lk = self.plant.lock_for(job.wo)
+        if lk and lk.fixed_seq is not None:
+            seq = int(lk.fixed_seq)
+        else:
+            seq = max_seq + 1
+
+        sj = ScheduledJob(
+            line=self.line.name,
+            block=block_no,
+            decorator=decorator_name,
+            seq=seq,
+            role_in_block=role_in_block,
+            job=job,
+        )
+        self.plant.add(sj)
+
+        self.erp_locked.get(decorator_name, set()).discard(job.wo)
+
+        self.last_family[decorator_name] = job.family
+        self.last_color[decorator_name] = job.primary_color
+        self.lock_item(job.item_number, decorator_name)
+        self.last_item[decorator_name] = job.item_number
+        self.pin_item_siblings(job.item_number, decorator_name)
+
+    def seed_pinned_jobs(self, qty_cap_per_decorator: int = 200_000) -> None:
+        self.erp_locked = {"A": set(), "B": set()}
         target = norm_line(self.line.name)
 
         for dec_name in ("A", "B"):
-            # 1) Gather ALL ERP jobs for this resource
             sequenced = [
                 j for j in self.pool.values()
                 if j.required_decorator == dec_name
                 and int(getattr(j, "erp_seq", 0) or 0) > 0
                 and norm_line(j.erp_line) == target
             ]
-
-            # Sort in ERP order (stable tie-breaker)
             sequenced.sort(key=lambda j: (int(j.erp_seq), j.wo))
 
-            # 2) Re-index ERP order contiguously starting at 1
             wo_to_rank: dict[str, int] = {}
             for rank, j in enumerate(sequenced, start=1):
                 wo_to_rank[j.wo] = rank
 
-            # 3) Choose protected prefix by cumulative qty (first ~200k)
             cum = 0
             pinned_jobs: list[Job] = []
             protected_wos: set[str] = set()
@@ -681,12 +729,10 @@ class Scheduler:
                 protected_wos.add(j.wo)
                 cum += int(j.qty)
 
-            # 4) Save pinned in order
             self.pinned[dec_name] = deque(pinned_jobs)
 
-            # 5) Apply hard locks for protected prefix (seq 1..K)
             for j in pinned_jobs:
-                rank = wo_to_rank[j.wo]  # contiguous
+                rank = wo_to_rank[j.wo]
                 self.erp_locked[dec_name].add(j.wo)
                 self.plant.lock(
                     j.wo,
@@ -698,7 +744,6 @@ class Scheduler:
                     ),
                 )
 
-            # 6) Remove protected from pool; push remainder back into pool stripped of ERP constraints
             for j in sequenced:
                 if j.wo in protected_wos:
                     self.pool.remove_wo(j.wo)
@@ -732,136 +777,13 @@ class Scheduler:
         candidates.sort(key=key)
         return candidates[:count]
 
-    def decorator_object(self, decorator_name):
-        return self.line.decorator(decorator_name)
-
-    def is_eligible(self, job, decorator_name):
-        if job.required_decorator in ("A", "B") and job.required_decorator != decorator_name:
-            return False
-
-        if not self.is_item_eligible(job, decorator_name):
-            return False
-
-        fam = job.family
-        if fam == "UNKNOWN":
-            return True
-        return (fam not in self.family_assignment) or (self.family_assignment[fam] == decorator_name)
-
-    def lock_family(self, family, decorator_name):
-        if family == "UNKNOWN":
-            return
-        if family not in self.family_assignment:
-            self.family_assignment[family] = decorator_name
-
-    def remove_job(self, wo):
-        self.pool.remove_wo(wo)
-
-    def pick_largest_job(self, decorator_name):
-        eligible = [j for j in self.pool.values() if self.line.can_run(j) and self.is_eligible(j, decorator_name)]
-        if not eligible:
-            return None
-
-        candidates = [j for j in eligible if int(j.qty) >= 60000]
-        if not candidates:
-            candidates = eligible
-
-        current_fam = self.last_family.get(decorator_name)
-        current_color = self.last_color.get(decorator_name)
-        current_item = self.last_item.get(decorator_name)
-
-        def sort_key(j):
-            stay_family = int(bool(current_fam) and current_fam != "UNKNOWN" and j.family == current_fam)
-            stay_color = int(bool(current_color) and current_color != "UNKNOWN" and j.primary_color == current_color)
-            stay_item = int(bool(current_item) and j.item_number and j.item_number == current_item)
-            return (-stay_item, -stay_family, -stay_color, -j.qty, j.color_rank, j.wo)
-
-        candidates.sort(key=sort_key)
-        return candidates[0]
-
-    def pick_small_jobs(self, decorator_name, count):
-        if count <= 0:
-            return []
-
-        candidates = [
-            j for j in self.pool.values()
-            if j.qty < 60000 and self.line.can_run(j) and self.is_eligible(j, decorator_name)
-        ]
-        if not candidates:
-            return []
-
-        current_fam = self.last_family.get(decorator_name)
-        current_color = self.last_color.get(decorator_name)
-        current_item = self.last_item.get(decorator_name)
-
-        def sort_key(j):
-            stay_family = int(bool(current_fam) and current_fam != "UNKNOWN" and j.family == current_fam)
-            stay_color = int(bool(current_color) and current_color != "UNKNOWN" and j.primary_color == current_color)
-            stay_item = int(bool(current_item) and j.item_number and j.item_number == current_item)
-            return (-stay_item, -stay_family, -stay_color, j.color_rank, j.qty, j.wo)
-
-        candidates.sort(key=sort_key)
-        return candidates[:count]
-
-    def schedule_job(self, decorator_name, block_no, job, role_in_block):
-        existing = self.plant.by_resource(self.line.name, decorator_name)
-        max_seq = max((int(sj.seq) for sj in existing), default=0)
-
-        lk = self.plant.lock_for(job.wo)
-        if lk and lk.fixed_seq is not None:
-            seq = int(lk.fixed_seq)
-        else:
-            seq = max_seq + 1
-
-        sj = ScheduledJob(
-            line=self.line.name,
-            block=block_no,
-            decorator=decorator_name,
-            seq=seq,
-            role_in_block=role_in_block,
-            job=job,
-        )
-        self.plant.add(sj)
-        if hasattr(self, "erp_locked"):
-            self.erp_locked.get(decorator_name, set()).discard(job.wo)
-
-        self.last_family[decorator_name] = job.family
-        self.last_color[decorator_name] = job.primary_color
-        self.lock_item(job.item_number, decorator_name)
-        self.last_item[decorator_name] = job.item_number
-        self.pin_item_siblings(job.item_number, decorator_name)
-
-    def remove_pinned_wo(self, decorator_name: str, wo: str) -> bool:
-        q = self.pinned.get(decorator_name)
-        if not q:
-            return False
-        for j in list(q):
-            if j.wo == wo:
-                q.remove(j)
-                return True
-        return False
-
-    # -------------------------
-    # Deadline-aware promotion
-    # -------------------------
-
     def _iter_unscheduled_jobs(self, decorator_name: str) -> Iterable[Job]:
-        """
-        Jobs that could be scheduled on decorator_name, including:
-        - pinned (in-order)
-        - pool
-        NOTE: pinned jobs are already removed from pool in your design.
-        """
-        # pinned first (these are "more real" in your current intent)
         for j in self.pinned.get(decorator_name, deque()):
             yield j
         for j in self.pool.values():
             yield j
 
     def _next_due_job(self, decorator_name: str) -> Optional[Job]:
-        """
-        Earliest due job (any qty) that is runnable + eligible on this decorator.
-        Only considers jobs with a req_date.
-        """
         cands: list[Job] = []
         for j in self._iter_unscheduled_jobs(decorator_name):
             if j.req_date is None:
@@ -879,11 +801,6 @@ class Scheduler:
         return cands[0]
 
     def _build_other_side_jobs_for_anchor(self, other_deco: str, anchor_job: Job) -> list[Job]:
-        """
-        Build the list of "other side" jobs to run in the block given an anchor job.
-        Keeps your existing logic: other side tries to match anchor qty/60k.
-        Uses pinned preview + pick_small_jobs_due.
-        """
         anchor_qty = int(anchor_job.qty)
         target_count_for_other = max(1, int(math.floor(anchor_qty / 60000.0)))
         small_jobs_needed = max(0, target_count_for_other - 1)
@@ -905,11 +822,6 @@ class Scheduler:
         return chosen
 
     def _finish_if_anchored_now(self, decorator_name: str, job: Job) -> Optional[datetime]:
-        """
-        Best-effort 'can we meet req_date if we force this job as the anchor NOW?'
-        Returns predicted finish time for that WO if it is anchored now, else None if simulation
-        didn't finish it (shouldn't happen).
-        """
         other = self.line.other_decorator(decorator_name)
         other_jobs = self._build_other_side_jobs_for_anchor(other, job)
 
@@ -926,22 +838,7 @@ class Scheduler:
         return sim.wo_finish.get(job.wo)
 
     def _find_promotable_critical_anchor(self) -> Optional[tuple[str, Job]]:
-        """
-        Decide whether we must override preference to avoid missing due dates.
-
-        A job is "critical" if:
-          - it has a req_date
-          - if we DON'T force it now, it risks becoming infeasible soon (we approximate by checking
-            whether its slack if anchored now is small/negative)
-        Simplest robust rule:
-          - If 'anchor it now' would still be late -> infeasible overall -> raise.
-          - Else if slack when anchored now is below 0 (late) -> infeasible -> raise
-          - Else if slack when anchored now is within a small buffer, we promote it now.
-
-        You can tune buffer_hours.
-        """
-        buffer_hours = 0.0  # set to e.g. 2.0 if you want a safety buffer
-
+        buffer_hours = 0.0
         candidates: list[tuple[float, str, Job, datetime]] = []
 
         for dec in ("A", "B"):
@@ -954,14 +851,12 @@ class Scheduler:
                 continue
 
             if j.req_date is not None and fin > j.req_date:
-                # even "force now" can't hit it -> true infeasible
                 raise ValidationError(
                     f"WO {j.wo} cannot meet REQ_DATE even if anchored immediately on {self.line.name}/{dec}. "
                     f"Finish={fin}, REQ_DATE={j.req_date}."
                 )
 
             s = slack_hours(fin, j.req_date)
-            # store by smallest slack first (most urgent)
             candidates.append((s, dec, j, fin))
 
         if not candidates:
@@ -975,30 +870,19 @@ class Scheduler:
 
         return None
 
-    def _remove_job_everywhere(self, decorator_name: str, wo: str) -> bool:
-        """
-        Remove a WO from pinned if present, else from pool.
-        Returns True if removed from pinned, False otherwise.
-        """
-        if self.remove_pinned_wo(decorator_name, wo):
-            return True
-        self.remove_job(wo)
-        return False
-
     def run(self):
         self.seed_pinned_jobs(qty_cap_per_decorator=200_000)
 
-        def has_work():
+        def has_work() -> bool:
             return self.pool.has_work() or bool(self.pinned["A"]) or bool(self.pinned["B"])
 
         while has_work():
-            # 0) Deadline-aware promotion can override preferred anchor decorator
             promoted = self._find_promotable_critical_anchor()
+
             if promoted is not None:
                 pref, forced_job = promoted
                 other = self.line.other_decorator(pref)
 
-                # if ERP protected prefix exists on pref, it still wins (hard rule)
                 if self.pinned[pref]:
                     forced = None
                     for j in self.pinned[pref]:
@@ -1009,13 +893,11 @@ class Scheduler:
                         raise ValidationError(f"Pinned ERP jobs exist on {self.line.name}/{pref} but none are eligible.")
                     anchor_shortlist = [forced]
                 else:
-                    # force the critical job as anchor (any qty)
                     anchor_shortlist = [forced_job]
             else:
                 pref = self.preferred_anchor_decorator
                 other = self.line.other_decorator(pref)
 
-                # 1) candidate anchors: pinned first, then pool anchors (>=60k), else any eligible
                 if self.pinned[pref]:
                     forced = None
                     for j in self.pinned[pref]:
@@ -1042,7 +924,6 @@ class Scheduler:
                     anchor_shortlist = pool_candidates[:20]
 
             if not anchor_shortlist:
-                # if preferred has nothing, swap preference
                 pref = other
                 other = self.line.other_decorator(pref)
                 self.preferred_anchor_decorator = pref
@@ -1055,9 +936,7 @@ class Scheduler:
                     if j.req_date is None:
                         continue
                     fin = sim.wo_finish.get(j.wo)
-                    if fin is None:
-                        return True
-                    if is_late(fin, j.req_date):
+                    if fin is None or is_late(fin, j.req_date):
                         return True
                 return False
 
@@ -1065,10 +944,8 @@ class Scheduler:
                 anchor_deco = pref
                 other_deco = other
 
-                # Choose the other-side jobs based on anchor qty (your existing logic)
                 chosen_other_jobs = self._build_other_side_jobs_for_anchor(other_deco, candidate_anchor)
 
-                # Simulate this candidate block
                 sim_clock = clone_clock(self.clock)
                 sim = simulate_block(
                     start_time=self.cur_time,
@@ -1085,10 +962,10 @@ class Scheduler:
                     continue
 
                 score = (
-                    -sim.min_slack_hrs,                                
-                    (candidate_anchor.req_date or datetime.max).timestamp(), 
-                    -int(candidate_anchor.qty),                        
-                    int(candidate_anchor.color_rank),                  
+                    -sim.min_slack_hrs,
+                    (candidate_anchor.req_date or datetime.max).timestamp(),
+                    -int(candidate_anchor.qty),
+                    int(candidate_anchor.color_rank),
                 )
 
                 if best_choice is None or score > best_choice[0]:
@@ -1102,16 +979,13 @@ class Scheduler:
 
             _score, anchor_job, other_jobs = best_choice
 
-            # Remove anchor from pinned/pool on its decorator
             self._remove_job_everywhere(pref, anchor_job.wo)
 
-            # Commit anchor
             self.block_number += 1
             self.lock_family(anchor_job.family, pref)
             self.lock_item(anchor_job.item_number, pref)
             self.schedule_job(pref, self.block_number, anchor_job, "ANCHOR")
 
-            # Commit other-side jobs on other decorator (these are still "SMALL" in your data model)
             other_decorator = self.line.other_decorator(pref)
             for j in other_jobs:
                 self._remove_job_everywhere(other_decorator, j.wo)
@@ -1119,10 +993,9 @@ class Scheduler:
                 self.lock_item(j.item_number, other_decorator)
                 self.schedule_job(other_decorator, self.block_number, j, "SMALL")
 
-            # Advance REAL clock/time by simulating the committed block on the real clock
             committed = simulate_block(
                 start_time=self.cur_time,
-                clock=self.clock,  # real clock (mutates calendar idx)
+                clock=self.clock,
                 anchor_deco=pref,
                 anchor_job=anchor_job,
                 small_jobs=other_jobs,
@@ -1131,7 +1004,6 @@ class Scheduler:
             )
             self.cur_time = committed.end_time
 
-            # Toggle preference
             self.preferred_anchor_decorator = other_decorator
 
             self.block_summaries.append({
@@ -1157,34 +1029,27 @@ class Scheduler:
         return blocks_df, decorator_a_df, decorator_b_df, family_assignment_df
 
 
-def item_prefix3(item_number: Optional[str]) -> str:
-    if item_number is None:
-        return ""
-    digits = re.sub(r"\D+", "", str(item_number))
-    return digits[:3]
-    
-def norm_line(x: object) -> str:
-    if x is None:
-        return ""
-    s = str(x).strip().upper()
-    # keep only letters+digits so "LINE 4" == "LINE4"
-    return re.sub(r"[^A-Z0-9]+", "", s)
+# ----------------------------
+# DataFrame helpers + timeline
+# ----------------------------
 
-def assign_jobs_to_lines(all_jobs, lines):
-    buckets = {line.name: [] for line in lines}
-    unassigned = []
+@dataclass
+class JobState:
+    job: Job
+    qty_done: int = 0
 
-    for job in all_jobs:
-        placed = False
-        for line in lines:
-            if line.can_run(job):
-                buckets[line.name].append(job)
-                placed = True
-                break
-        if not placed:
-            unassigned.append(job)
+    @property
+    def qty_total(self) -> int:
+        return int(self.job.qty)
 
-    return buckets, unassigned
+    @property
+    def qty_remaining(self) -> int:
+        return max(0, self.qty_total - self.qty_done)
+
+    @property
+    def is_done(self) -> bool:
+        return self.qty_done >= self.qty_total
+
 
 def scheduled_jobs_to_df(jobs: list[ScheduledJob]) -> pd.DataFrame:
     return pd.DataFrame([{
@@ -1204,27 +1069,11 @@ def scheduled_jobs_to_df(jobs: list[ScheduledJob]) -> pd.DataFrame:
         "CAN_SIZE": sj.job.can_size,
     } for sj in jobs])
 
-@dataclass
-class JobState:
-    job: Job
-    qty_done: int = 0
-
-    @property
-    def qty_total(self) -> int:
-        return int(self.job.qty)
-
-    @property
-    def qty_remaining(self) -> int:
-        return max(0, self.qty_total - self.qty_done)
-
-    @property
-    def is_done(self) -> bool:
-        return self.qty_done >= self.qty_total
 
 def build_timeline_from_objects(
-    dec_a_jobs: list["ScheduledJob"],
-    dec_b_jobs: list["ScheduledJob"],
-    start_time: "datetime | str",
+    dec_a_jobs: list[ScheduledJob],
+    dec_b_jobs: list[ScheduledJob],
+    start_time: datetime | str,
     *,
     clock: ProductionClock,
     setup_equiv_qty: int = 60_000,
@@ -1264,7 +1113,6 @@ def build_timeline_from_objects(
         cur, pieces = clock.consume(cur, int(qty_run))
         seg_end = cur
 
-        # main RUN segment (what you already had)
         timeline_rows.append({
             "BLOCK": int(block_no),
             "DECORATOR": str(producing_deco),
@@ -1279,7 +1127,6 @@ def build_timeline_from_objects(
             "TYPE": "RUN",
         })
 
-        # add DOWN segments encountered while producing this segment
         for p in pieces:
             if p.get("TYPE") == "DOWN":
                 timeline_rows.append({
@@ -1296,7 +1143,7 @@ def build_timeline_from_objects(
                     "TYPE": "DOWN",
                 })
 
-    def block_jobs(jobs: list["ScheduledJob"], block_no: int, role: str) -> list[JobState]:
+    def block_jobs(jobs: list[ScheduledJob], block_no: int, role: str) -> list[JobState]:
         blk = [sj for sj in jobs if sj.block == block_no and sj.role_in_block == role]
         blk.sort(key=lambda sj: int(sj.seq))
         return [JobState(job=sj.job) for sj in blk]
@@ -1314,11 +1161,10 @@ def build_timeline_from_objects(
             anchors.sort(key=lambda sj: int(sj.seq))
             anchor_sj = anchors[0]
 
-        anchor_deco = str(anchor_sj.decorator)  # "A" or "B"
+        anchor_deco = str(anchor_sj.decorator)
         other_deco = "B" if anchor_deco == "A" else "A"
 
         anchor_job = JobState(job=anchor_sj.job)
-
         small_queue = (
             block_jobs(a_run, block, "SMALL") if other_deco == "A"
             else block_jobs(b_run, block, "SMALL")
@@ -1404,15 +1250,30 @@ def build_timeline_from_objects(
 
     a_df = scheduled_jobs_to_df(dec_a_jobs)
     b_df = scheduled_jobs_to_df(dec_b_jobs)
-
     return annotate_schedule(a_df), annotate_schedule(b_df), timeline_df
 
 
-def assign_jobs_to_lines_balanced(all_jobs, lines):
-    buckets = {line.name: [] for line in lines}
-    unassigned = []
+# ----------------------------
+# Assignment + parsing helpers
+# ----------------------------
 
-    # simple “load” metric: total qty assigned so far
+def norm_line(x: object) -> str:
+    if x is None:
+        return ""
+    s = str(x).strip().upper()
+    return re.sub(r"[^A-Z0-9]+", "", s)
+
+
+def item_prefix3(item_number: Optional[str]) -> str:
+    if item_number is None:
+        return ""
+    digits = re.sub(r"\D+", "", str(item_number))
+    return digits[:3]
+
+
+def assign_jobs_to_lines_balanced(all_jobs: list[Job], lines: list[Line]):
+    buckets = {line.name: [] for line in lines}
+    unassigned: list[Job] = []
     load = defaultdict(int)
 
     for job in all_jobs:
@@ -1421,13 +1282,12 @@ def assign_jobs_to_lines_balanced(all_jobs, lines):
             unassigned.append(job)
             continue
 
-        # pick the line with the smallest current load
         best = min(eligible_lines, key=lambda ln: load[ln.name])
-
         buckets[best.name].append(job)
         load[best.name] += int(job.qty)
 
     return buckets, unassigned
+
 
 def jobs_from_rows(rows) -> list[Job]:
     jobs: list[Job] = []
@@ -1456,103 +1316,3 @@ def jobs_from_rows(rows) -> list[Job]:
             ),
         ))
     return jobs
-
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("input_xlsx", help="Input Excel file path")
-    args = ap.parse_args()
-
-    in_path = Path(args.input_xlsx).expanduser().resolve()
-    start_time = "2026-1-11 06:00"
-
-    data = load_and_clean(in_path)
-    input_df = input_df_from_cleaned(data)
-
-    conn_str = (
-        "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=dscsqc;"
-        "DATABASE=SchedulePlanning;"
-        "Trusted_Connection=yes;"
-    )
-
-    write_input_to_sqlserver(conn_str, input_df)
-    all_jobs = jobs_from_rows(data.itertuples(index=False))
-
-    plant = PlantSchedule()
-
-    lines = [
-        Line(
-            name="LINE4",
-            daily_capacity=0,
-            decorator_names=("A", "B"),
-            can_run_fn=lambda j: item_prefix3(j.item_number) in {"710", "205"},
-        )
-    ]
-
-    buckets, unassigned = assign_jobs_to_lines_balanced(all_jobs, lines)
-
-
-    start_dt = pd.to_datetime(start_time)
-    end_dt = start_dt + pd.Timedelta(days=21)
-
-    # 1) Build schedule using downtime-aware clock (time-aware selection)
-    for ln in lines:
-        cal_df = read_line_hourly_status(conn_str, ln.name, start_dt, end_dt)
-        cal_df = cal_df[["HourStart", "IsDown"]].copy()
-        cal_df["HourStart"] = pd.to_datetime(cal_df["HourStart"])
-        cal_df = cal_df.sort_values("HourStart").reset_index(drop=True)
-
-        clock = HourlyCalendarClock(
-            rate_cph=29_000.0,
-            cal=CalendarCursor(calendar_df=cal_df, idx=0),
-        )
-
-    Scheduler(
-        buckets[ln.name],
-        ln,
-        plant,
-        clock=clock,
-        start_time=start_dt.to_pydatetime(),
-    ).run()
-
-    plant.normalize_sequences()
-    plant.validate()
-
-    # 2) Persist plant schedule tables
-    work_orders_df, schedule_df = dataframes_from_plant(plant)
-    write_schedule_to_sqlserver(conn_str, work_orders_df, schedule_df)
-
-    # 3) Export per-line timeline JSON (re-simulate timeline for reporting)
-    for ln in lines:
-        a = plant.by_resource(ln.name, "A")
-        b = plant.by_resource(ln.name, "B")
-
-        cal_df = read_line_hourly_status(conn_str, ln.name, start_dt, end_dt)
-        cal_df = cal_df[["HourStart", "IsDown"]].copy()
-        cal_df["HourStart"] = pd.to_datetime(cal_df["HourStart"])
-        cal_df = cal_df.sort_values("HourStart").reset_index(drop=True)
-
-        clock = HourlyCalendarClock(
-            rate_cph=29_000.0,
-            cal=CalendarCursor(calendar_df=cal_df, idx=0),
-        )
-
-        a_df, b_df, timeline_df = build_timeline_from_objects(
-            a, b,
-            start_time=start_time,
-            clock=clock,
-            setup_equiv_qty=60_000,
-            anchor_slice_qty=60_000,
-        )
-
-        export_timeline_json(
-            timeline_df,
-            Path(f"output.{ln.name}.timeline.json"),
-            start_time=start_time,
-            deco_a_df=a_df,
-            deco_b_df=b_df,
-        )
-
-
-if __name__ == "__main__":
-    main()

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-01-12T12:34:39",
+    "generated_at": "2026-01-13T08:23:14",
     "start_time": "2025-12-30 06:00",
     "segment_count": 35
   },
@@ -659,8 +659,8 @@
         "item_number": "604-07509",
         "description": "Farmer Brothers Pan Guard",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-30T06:00:00",
-        "planned_finish": "2025-12-30T07:04:08.275862"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 2,
@@ -673,8 +673,8 @@
         "item_number": "604-07158",
         "description": "ZZZ Behr Hi Shine Gold",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-30T09:08:16.551724",
-        "planned_finish": "2025-12-30T09:48:12.413793"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 2,
@@ -701,8 +701,8 @@
         "item_number": "604-06390",
         "description": "Sprayway Glass Foam Action",
         "req_date": "2026-01-11T00:00:00",
-        "planned_start": "2025-12-30T09:55:02.068965",
-        "planned_finish": "2025-12-31T00:11:35.172413"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 4,
@@ -715,8 +715,8 @@
         "item_number": "604-07540",
         "description": "Lysol NeutraAir 2in1 Laven238g",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T02:15:43.448275",
-        "planned_finish": "2025-12-31T02:58:10.758620"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 4,
@@ -729,8 +729,8 @@
         "item_number": "604-07857",
         "description": "GV Whip Topping 225G",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T05:02:19.034482",
-        "planned_finish": "2025-12-31T05:47:07.862068"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 4,
@@ -743,8 +743,8 @@
         "item_number": "604-07734",
         "description": "Lysol Air Summ Watermelon 10oz",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T07:51:16.137930",
-        "planned_finish": "2025-12-31T09:30:19.862068"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 5,
@@ -757,8 +757,8 @@
         "item_number": "604-07726",
         "description": "AG42 Clsc Crm GS Crml Delight",
         "req_date": "2026-01-17T00:00:00",
-        "planned_start": "2025-12-31T13:26:11.586206",
-        "planned_finish": "2025-12-31T15:38:16.551723"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 7,
@@ -771,8 +771,8 @@
         "item_number": "604-05647",
         "description": "Harley Davidson Polish",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T17:35:25.241378",
-        "planned_finish": "2025-12-31T18:27:18.620688"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 9,
@@ -785,8 +785,8 @@
         "item_number": "604-07643",
         "description": "ZZZ Behr Semi-Gloss Black",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T19:09:45.931033",
-        "planned_finish": "2025-12-31T19:51:26.068964"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 11,
@@ -799,8 +799,8 @@
         "item_number": "604-07806",
         "description": "Behr Appliance Expoxy White",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T20:38:36.413792",
-        "planned_finish": "2025-12-31T21:02:11.586206"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 13,
@@ -813,8 +813,8 @@
         "item_number": "604-07894",
         "description": "AS34 Sprouts Cinnamon Cayenne",
         "req_date": "2026-01-16T00:00:00",
-        "planned_start": "2025-12-31T21:39:08.689654",
-        "planned_finish": "2025-12-31T22:21:35.999999"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 15,
@@ -827,8 +827,8 @@
         "item_number": "604-07463",
         "description": "Crisco Profess Grill Master",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-31T22:59:20.275861",
-        "planned_finish": "2025-12-31T23:34:30.620689"
+        "planned_start": null,
+        "planned_finish": null
       }
     ],
     "B": [
@@ -843,8 +843,8 @@
         "item_number": "604-05788",
         "description": "AV2  Whole Foods 365 Oat Base",
         "req_date": "2026-01-14T00:00:00",
-        "planned_start": "2025-12-30T07:04:08.275862",
-        "planned_finish": "2025-12-30T09:55:02.068965"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -857,8 +857,8 @@
         "item_number": "604-06496",
         "description": "Amway AH Prewash Spray",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-30T11:59:10.344827",
-        "planned_finish": "2025-12-30T12:34:33.103448"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -871,8 +871,8 @@
         "item_number": "604-07912",
         "description": "Jax109 Food-Grade Pen Oil 11oz",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-30T14:38:41.379310",
-        "planned_finish": "2025-12-30T15:11:42.620689"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -885,8 +885,8 @@
         "item_number": "604-06374",
         "description": "Par-Way Vegalene Grid Iron",
         "req_date": "2026-01-15T00:00:00",
-        "planned_start": "2025-12-30T17:15:50.896551",
-        "planned_finish": "2025-12-30T18:34:28.137930"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 3,
@@ -899,8 +899,8 @@
         "item_number": "604-07012",
         "description": "Lubriplate FMO 350AW",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-30T20:38:36.413792",
-        "planned_finish": "2025-12-30T21:16:20.689654"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 4,
@@ -913,8 +913,8 @@
         "item_number": "604-07802",
         "description": "Gay Lea Real Whip Cream 225g",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T00:11:35.172413",
-        "planned_finish": "2025-12-31T13:26:11.586206"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 6,
@@ -927,8 +927,8 @@
         "item_number": "604-07355",
         "description": "A33 Cabot Sweet Light 7oz Pink",
         "req_date": "2026-01-12T00:00:00",
-        "planned_start": "2025-12-31T15:38:16.551723",
-        "planned_finish": "2025-12-31T17:35:25.241378"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 8,
@@ -941,8 +941,8 @@
         "item_number": "604-07100",
         "description": "ZZZ Blaster Cable & Chain Lube",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T18:27:18.620688",
-        "planned_finish": "2025-12-31T19:09:45.931033"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 10,
@@ -955,8 +955,8 @@
         "item_number": "604-07797",
         "description": "Compliments Creamy Whip 225g",
         "req_date": "2026-01-19T00:00:00",
-        "planned_start": "2025-12-31T19:51:26.068964",
-        "planned_finish": "2025-12-31T20:38:36.413792"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 12,
@@ -969,8 +969,8 @@
         "item_number": "604-05118",
         "description": "Beryman Air Intake &Throttle",
         "req_date": "2026-01-18T00:00:00",
-        "planned_start": "2025-12-31T21:02:11.586206",
-        "planned_finish": "2025-12-31T21:39:08.689654"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 14,
@@ -983,8 +983,8 @@
         "item_number": "604-07748",
         "description": "Imperial Battery Protector",
         "req_date": "2026-01-12T00:00:00",
-        "planned_start": "2025-12-31T22:21:35.999999",
-        "planned_finish": "2025-12-31T22:59:20.275861"
+        "planned_start": null,
+        "planned_finish": null
       },
       {
         "block": 16,
@@ -997,8 +997,8 @@
         "item_number": "604-04700",
         "description": "AUTOGUARD PREM START FLD-GHS",
         "req_date": "2026-01-17T00:00:00",
-        "planned_start": "2025-12-31T23:34:30.620689",
-        "planned_finish": "2026-01-01T00:07:31.862068"
+        "planned_start": null,
+        "planned_finish": null
       }
     ]
   }
