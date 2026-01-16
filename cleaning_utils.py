@@ -140,7 +140,7 @@ def load_and_clean(
                 return "UNKNOWN"
 
             if part not in cache:
-                print(f"Computing color for part '{part}' (row {idx})...")
+                #print(f"Computing color for part '{part}' (row {idx})...")
                 color = compute_primary_color_for_part(
                     part, base_dir=pdf_base_dir, config=color_cfg
                 )
@@ -149,6 +149,8 @@ def load_and_clean(
             return cache[part]
 
         colors = pd.Series((resolve_color(i, part) for i, part in enumerate(parts)),index=parts.index,)
+
+    print("Color computation complete.")
 
     data = pd.DataFrame({
         "WO": (raw[wo_col].where(pd.notna(raw[wo_col]), "").astype(str).str.strip().str.replace(r"\.0$", "", regex=True)),

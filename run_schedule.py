@@ -138,6 +138,10 @@ def main():
 
     # 7) Persist plant schedule tables
     work_orders_df, schedule_df = dataframes_from_plant(plant)
+    print("work_orders_df columns:", list(work_orders_df.columns))
+    print("schedule_df columns:", list(schedule_df.columns))
+    print("work_orders_df shape:", work_orders_df.shape)
+    print("schedule_df shape:", schedule_df.shape)
     write_schedule_to_sqlserver(conn_str, work_orders_df, schedule_df)
 
     # 8) Export per-line timeline JSON (re-simulate timeline for reporting)
